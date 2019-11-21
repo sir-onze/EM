@@ -1,0 +1,40 @@
+/* 
+	Definição dos conceitos base do problema
+*/
+abstract sig Vehicle {}
+abstract sig Button {}
+
+/* 
+	Definição dos tipos de veículo
+*/
+sig USA extends Vehicle{
+	danger : one Danger_Button
+}
+sig EU extends Vehicle{
+	danger : one Danger_Button
+}
+sig CAN extends Vehicle{
+	danger : one Danger_Button
+}
+sig BLIN extends Vehicle{
+	danger : one Danger_Button,
+	dark   : one Darkness_Mode
+}
+
+
+/* 
+	Definição do estado dos butões
+*/
+var sig On in Button {}
+
+/* 
+	Definição dos butões
+*/
+sig Danger_Button extends Button {}
+sig Darkness_Mode extends Button {}
+
+/* 
+	Definição de predicados 
+*/
+
+run{} for 4
