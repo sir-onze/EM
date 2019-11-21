@@ -4,21 +4,26 @@
 abstract sig Vehicle {}
 abstract sig Button {}
 
+
 /* 
 	Definição dos tipos de veículo
 */
 sig USA extends Vehicle{
-	danger : one Danger_Button
+	danger_us : one Danger_Button,
+	engine_us : one Engine_Status
 }
 sig EU extends Vehicle{
-	danger : one Danger_Button
+	danger_eu : one Danger_Button,
+	engine_eu : one Engine_Status
 }
 sig CAN extends Vehicle{
-	danger : one Danger_Button
+	danger_can : one Danger_Button,
+	engine_can : one Engine_Status
 }
 sig BLIN extends Vehicle{
-	danger : one Danger_Button,
-	dark   : one Darkness_Mode
+	danger_blin : one Danger_Button,
+	dark_blin   : one Darkness_Mode,
+	engine_blin : one Engine_Status
 }
 
 
@@ -32,9 +37,21 @@ var sig On in Button {}
 */
 sig Danger_Button extends Button {}
 sig Darkness_Mode extends Button {}
+sig Engine_Status extends Button {}
 
 /* 
 	Definição de predicados 
 */
 
-run{} for 4
+fact init {
+	/* Todos os carros iniciam com o motor desligado*/
+	no engine_can.On
+	no engine_eu.On
+	no engine_blin.On
+	/* Todos os carros iniciam com as luzes desligadas*/
+	no danger_us.On
+	// ()...)
+	
+}
+
+run{} for 2
