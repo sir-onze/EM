@@ -43,15 +43,46 @@ sig Engine_Status extends Button {}
 	Definição de predicados 
 */
 
-fact init {
+pred init {
 	/* Todos os carros iniciam com o motor desligado*/
 	no engine_can.On
 	no engine_eu.On
 	no engine_blin.On
+	no engine_us.On
 	/* Todos os carros iniciam com as luzes desligadas*/
 	no danger_us.On
-	// ()...)
+	no danger_eu.On
+	no danger_can.On
+	no danger_blin.On
+ 	no dark_blin.On
+}
+
+fact belongs_to {
+	/* 
+	Todos os veículos tem botões 
+	*/
+	all u:USA | always one u.danger_us
+	all c:CAN | always one c.danger_can
+	all e:EU  | always one e.danger_eu
+	all u:BLIN| always one u.danger_blin
+	/* 
+	Os botões e sensores apenas pertencem a um veículo ??
+	*/
+		
+}
+
+pred engine_start [v:Vehicle] {
 	
 }
 
-run{} for 2
+
+pred skip[] {
+}
+fact event{
+	/* so se pode passar de um estado para um novo caso exista 
+	   uma operação de leitura ou de escrita
+	*/
+	init 
+	always (some v :Vehicle | /*read[v] or*/ engine_start[v] or skip)
+}
+run{} 
