@@ -83,6 +83,6 @@ fact event{
 	   uma operação de leitura ou de escrita
 	*/
 	init 
-	always (some v :Vehicle | /*read[v] or*/ engine_start[v] or skip)
+	always (some v :Vehicle | engine_start[v] or skip)
 }
 run{} 
