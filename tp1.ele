@@ -45,12 +45,16 @@ sig Engine_Status extends Button {}
 
 fact init {
 	/* Todos os carros iniciam com o motor desligado*/
+	no engine_us.On
 	no engine_can.On
 	no engine_eu.On
 	no engine_blin.On
 	/* Todos os carros iniciam com as luzes desligadas*/
 	no danger_us.On
-	// ()...)
+	no danger_eu.On
+	no danger_can.On
+	no danger_blin.On
+	no dark_blin.On
 	
 }
 
