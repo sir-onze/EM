@@ -69,7 +69,7 @@ fact belongs_to {
 }
 
 pred engine_start [v:Vehicle] {
-	v'.engine = engine.On
+	
 }
 
 
