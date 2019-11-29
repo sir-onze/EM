@@ -3,11 +3,14 @@
 */
 abstract sig Vehicle {
 	engine: one Engine_Status,
-	danger: one Danger_Button
+	danger: one Danger_Button,
+	rotary: one Rotary,
+	daytime_light: one Daytime_Light
 }
 abstract sig Button {}
 
-sig Ligths extends Button{}
+sig Rotary extends Button{}
+
 /* 
 	Definição dos tipos de veículo
 */
@@ -22,7 +25,7 @@ sig USA,EU,CAN extends Vehicle{}
 	Definição do estado dos butões
 */
 var sig On in Button{}
-var sig Auto in Ligths{}
+var sig Auto in Rotary{}
 
 
 /* 
@@ -31,7 +34,7 @@ var sig Auto in Ligths{}
 sig Danger_Button extends Button {}
 sig Darkness_Mode extends Button {}
 sig Engine_Status extends Button {} 
-
+sig Daytime_Light extends Button {}
 /* 
 	Definição de predicados 
 */
@@ -39,6 +42,10 @@ sig Engine_Status extends Button {}
 pred init {
 	/* Todos os carros iniciam com o motor desligado*/
 	no engine.On
+	no rotary.On
+	no rotary.Auto
+	no danger.On
+	no daytime_light.On
 	/* Todos os carros iniciam com as luzes desligadas*/
  	//no dark.On
 
@@ -49,15 +56,20 @@ fact belongs_to {
 	Todos os veículos tem botões 
 	*/
 	all v:Vehicle| always one v.danger
+	all v:Vehicle| always one v.engine
+	all v:Vehicle| always one v.rotary
+	all v:Vehicle| always one v.daytime_light
 	/* 
 	Os botões e sensores apenas pertencem a um veículo ??
 	*/
 	all v1,v2:Vehicle | v1.danger=v2.danger implies v1=v2
-	all v1,v2:Vehicle | v1.engine=v2.engine implies v1=v2	
+	all v1,v2:Vehicle | v1.engine=v2.engine implies v1=v2
+	all v1,v2:Vehicle | v1.rotary=v2.rotary implies v1=v2
+	all v1,v2:Vehicle | v1.daytime_light=v2.daytime_light implies v1=v2
 }
 
 pred engine_start [v:Vehicle] {
-	
+	v'.engine = engine.On
 }
 
 
@@ -69,6 +81,6 @@ fact event{
 	   uma operação de leitura ou de escrita
 	*/
 	init 
-	always (some v :Vehicle | engine_start[v] or skip)
+	always (some v :Vehicle | engine_start[v] or skip[])
 }
-run{} for 10 but exactly 3 Vehicle 
+run{} for 15 but exactly 3 Vehicle 
