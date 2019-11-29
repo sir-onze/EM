@@ -7,7 +7,7 @@ abstract sig Vehicle {
 }
 abstract sig Button {}
 
-
+sig Ligths extends Button{}
 /* 
 	Definição dos tipos de veículo
 */
@@ -21,7 +21,9 @@ sig USA,EU,CAN extends Vehicle{}
 /* 
 	Definição do estado dos butões
 */
-var sig On in Button {}
+var sig On in Button{}
+var sig Auto in Ligths{}
+
 
 /* 
 	Definição dos butões
