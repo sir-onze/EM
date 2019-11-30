@@ -109,7 +109,14 @@ fact event{
 	/* so se pode passar de um estado para um novo caso exista 
 	   uma operação de leitura ou de escrita
 	*/
+<<<<<<< HEAD
 	init
 	always (all v :Vehicle | rotary_Auto[v] or engine_start[v] or rotary_On[v] or skip[])
 }
 run{} for 12 but exactly 1 USA, exactly 1 EU, exactly 1 CAN 
+=======
+	init 
+	always (some v :Vehicle | engine_start[v] or skip[])
+}
+run{} for 15 but exactly 3 Vehicle 
+>>>>>>> f5c6b4d36aa6ed5c07d91f5effe138f424341b60
