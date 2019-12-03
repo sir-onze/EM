@@ -86,12 +86,22 @@
 		 
 	}
 	
+	pred engine_stop [v:Vehicle] {
+		//pre Condição
+		v.engine in On
+		//Pos Condição 
+		always v.engine' not in On' 
+		//Frame Condition
+	    Auto' = Auto
+		On in On'
+		 
+	}
 	/** Ligação das luzes */
 	pred rotary_On [v:Vehicle]{
 		//pre Condição
-		v.rotary not in On
+		v.rotary not in On and v.engine in On
 		//Pos Condição 
-		v.rotary in On' and v.rotary not in Auto'
+		v.rotary in On' and v.rotary not in Auto' and v.engine in On'
 		//Frame Condição?? (n sei tradução xD)
 		On in On'
 		Auto' = Auto
@@ -100,9 +110,9 @@
 	/** Ligação das luzes no modo auto quando o motor é ligado */
 	pred rotary_Auto [v:Vehicle]{
 		//pre Condição
-		v.rotary not in Auto
+		v.rotary not in Auto and v.engine in On
 		//Pos Condição 
-		v.rotary in Auto' and v.rotary not in On'
+		v.rotary in Auto' and v.rotary not in On' and v.engine in On'
 		//Frame Condição?? (n sei tradução xD)
 		On' = On
 		Auto in Auto'
@@ -111,9 +121,19 @@
 	/** Ligação das luzes */
 	pred high_Beams_On [v:Vehicle]{
 		//pre Condição
-		v.pitman_arm not in On
+		v.pitman_arm not in On and v.engine in On
 		//Pos Condição 
-		v.pitman_arm in On'
+		v.pitman_arm in On' and v.engine in On'
+		//Frame Condição?? (n sei tradução xD)
+		On in On'
+		Auto' = Auto
+	} 
+
+	pred high_Beams_Off [v:Vehicle]{
+		//pre Condição
+		v.pitman_arm in On and v.engine in On
+		//Pos Condição 
+		v.pitman_arm not in On' and v.engine in On'
 		//Frame Condição?? (n sei tradução xD)
 		On in On'
 		Auto' = Auto
@@ -132,11 +152,17 @@
 		   uma operação de leitura ou de escrita
 		*/
 		init
-		always (all v :Vehicle | rotary_Auto[v] or engine_start[v] or rotary_On[v] or  high_Beams_On[v] or skip[])
+		always (all v :Vehicle | rotary_Auto[v]    or 
+								 engine_start[v]   or
+								 engine_stop[v]    or
+								 rotary_On[v]      or  
+								 high_Beams_On[v]  or
+								 high_Beams_Off[v] or 
+                                 skip[])
 	}
 	
 	
-	run{} for 20 but exactly 1 USA, exactly 1 EU, exactly 1 CAN 
+	run{} for 15 but exactly 1 USA, exactly 1 EU, exactly 1 CAN 
 	
 	
 	
