@@ -54,16 +54,17 @@
 	/** Predicado para inserir a chave*/
 	pred remove_key [v:Vehicle]{
 		//Pré-condição
-		one v.inserted_key:>On
+		one v.inserted_key:>On and no v.ignition_pos:>On
 		//Pós-Condição
 		v.inserted_key:>On' = v.inserted_key:>On - v.inserted_key
 		// Frame-Condition
-		
+		v.ignition_pos:>On' = v.ignition_pos:>On
+		v.engine:>On' = v.engine:>On 
 	}
 	/** Predicado para colocar a chave na ignição */
 	pred ignition_key [v:Vehicle]{
 		//Pré-condição
-		no v.ignition_pos :>On and one v.inserted_key:>On
+		one v.inserted_key:>On
 		//Pós-Condição
 		v.ignition_pos:>On' = v.ignition_pos:>On + v.ignition_pos
 		//Frame Condition
@@ -71,14 +72,27 @@
 		v.engine:>On'= v.engine:>On
 		
 	}
+	
+	/** Predicado para tirar a chave da igninção*/
+	pred no_ignition_key[v:Vehicle]{
+		//Pré-condição
+		one v.ignition_pos:>On and one v.inserted_key:>On
+		//Pós-condição
+		v.ignition_pos:>On' = v.ignition_pos:>On - v.ignition_pos
+		//Frame condition
+		v.inserted_key:>On'=v.inserted_key:>On
+		v.engine:>On'= v.engine:>On
+	}
 
 	/** Predicado para ligar o motor chave*/
 	pred engine_start [v:Vehicle]{
 		//Pré-condição
-		
+		one v.ignition_pos:>On
 		//Pós-Condição
-	
+		v.engine:>On' = v.engine:>On + v.engine
 		// Frame-Condition
+		v.ignition_pos:>On' = v.ignition_pos:>On
+		v.inserted_key:>On'=v.inserted_key:>On
 		
 	}
 
@@ -98,6 +112,7 @@
 
 	fact event {
 		init 
-		always (some v:Vehicle| insert_key[v] or remove_key[v] or ignition_key[v])
+		always (some v:Vehicle| insert_key[v] or ignition_key[v] or engine_start[v] or 
+							remove_key[v] or no_ignition_key[v])
 	}
  	run{} for 10 but exactly 1 USA
