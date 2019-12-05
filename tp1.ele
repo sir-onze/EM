@@ -1,0 +1,103 @@
+	/**
+		----------- Definição dos conceitos base do problema -----------
+	*/
+	abstract sig Vehicle {
+		 engine: one Engine_Status,
+		 inserted_key : one Inserted_Key,
+		 ignition_pos : one Ignition_Pos
+
+	}	
+	
+	/** Definição dos tipos de veículo*/
+	sig USA,EU,CAN extends Vehicle{}
+
+	/** Definição dos butões */
+	abstract sig Button {}
+	var sig On in Button {}
+	
+	/** Definição do estado do motor -> ON ou OFF */
+	sig Engine_Status extends Button {}
+
+	/** Definição do estado da inserção da chave -> ON-inserida ou OFF */	
+	sig  Inserted_Key extends Button {}
+	
+	/** Definição do estado da posição da chave na ingnição -> ON-inserida ou OFF */
+	sig  Ignition_Pos extends Button {}
+
+	/** Predicado para inserir a chave*/
+	
+	fact belongs {
+		/** 
+		Todos os veículos tem botões 
+		*/
+		always (all v:Vehicle| always one v.inserted_key)
+		always (all v:Vehicle| always one v.engine)
+		always (all v:Vehicle| always one v.ignition_pos)
+		/**
+		Os botões e sensores apenas pertencem a um veículo 
+		*/
+		always (all v1,v2 : Vehicle | v1.inserted_key = v2.inserted_key implies v1=v2)
+		always (all v1,v2:Vehicle | v1.engine=v2.engine implies v1=v2)
+		always (all v1,v2:Vehicle | v1.ignition_pos=v2.ignition_pos implies v1=v2)
+	}
+	/** Predicado para inserir a chave*/
+	pred insert_key [v:Vehicle]{
+		//Pré-condição
+		no v.inserted_key:>On
+		//Pós-Condição
+		v.inserted_key:>On' = v.inserted_key:>On + v.inserted_key
+		//Frame Condition
+		v.engine:>On'= v.engine:>On
+		v.ignition_pos:>On'=v.ignition_pos:>On
+	}
+	
+	/** Predicado para inserir a chave*/
+	pred remove_key [v:Vehicle]{
+		//Pré-condição
+		one v.inserted_key:>On
+		//Pós-Condição
+		v.inserted_key:>On' = v.inserted_key:>On - v.inserted_key
+		// Frame-Condition
+		
+	}
+	/** Predicado para colocar a chave na ignição */
+	pred ignition_key [v:Vehicle]{
+		//Pré-condição
+		no v.ignition_pos :>On and one v.inserted_key:>On
+		//Pós-Condição
+		v.ignition_pos:>On' = v.ignition_pos:>On + v.ignition_pos
+		//Frame Condition
+		v.inserted_key:>On'=v.inserted_key:>On
+		v.engine:>On'= v.engine:>On
+		
+	}
+
+	/** Predicado para ligar o motor chave*/
+	pred engine_start [v:Vehicle]{
+		//Pré-condição
+		
+		//Pós-Condição
+	
+		// Frame-Condition
+		
+	}
+
+	/** Predicado que permite ao sistema não efetuar qualquer ação*/
+	pred skip[]{
+	On'=On
+	Button'=Button
+	}
+
+	pred init{
+
+	all e:Engine_Status| e not in On
+	all k:Inserted_Key | k not in On
+	all i:Ignition_Pos | i not in On
+	
+	}
+
+	fact event {
+		init 
+		always (some v:Vehicle| insert_key[v] or remove_key[v] or ignition_key[v])
+	}
+ 	run{} for 10 but exactly 1 USA
