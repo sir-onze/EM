@@ -12,17 +12,17 @@
 	sig USA,EU,CAN extends Vehicle{}
 
 	/** Definição dos butões */
-	abstract sig Button {}
+	enum Button {Engine_Status, Inserted_Key, Ignition_Pos}
 	var sig On in Button {}
 	
 	/** Definição do estado do motor -> ON ou OFF */
-	sig Engine_Status extends Button {}
+//	sig Engine_Status extends Button {}
 
 	/** Definição do estado da inserção da chave -> ON-inserida ou OFF */	
-	sig  Inserted_Key extends Button {}
+//	sig  Inserted_Key extends Button {}
 	
 	/** Definição do estado da posição da chave na ingnição -> ON-inserida ou OFF */
-	sig  Ignition_Pos extends Button {}
+//	sig  Ignition_Pos extends Button {}
 
 	/** Predicado para inserir a chave*/
 	
