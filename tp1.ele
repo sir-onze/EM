@@ -4,7 +4,8 @@
 	abstract sig Vehicle {
 		 engine: one Engine_Status,
 		 inserted_key : one Inserted_Key,
-		 ignition_pos : one Ignition_Pos
+		 ignition_pos : one Ignition_Pos,
+		 rotary : one Rotary
 
 	}	
 	
@@ -12,8 +13,10 @@
 	sig USA,EU,CAN extends Vehicle{}
 
 	/** Definição dos butões */
-	enum Button {Engine_Status, Inserted_Key, Ignition_Pos}
+	enum Button {Engine_Status, Inserted_Key, Ignition_Pos,Rotary}
+	var sig Auto in Rotary {}
 	var sig On in Button {}
+	
 	
 	/** Definição do estado do motor -> ON ou OFF */
 //	sig Engine_Status extends Button {}
@@ -33,12 +36,15 @@
 		always (all v:Vehicle| always one v.inserted_key)
 		always (all v:Vehicle| always one v.engine)
 		always (all v:Vehicle| always one v.ignition_pos)
+		always (all v:Vehicle| always one v.rotary)
+		
 		/**
 		Os botões e sensores apenas pertencem a um veículo 
 		*/
 		always (all v1,v2 : Vehicle | v1.inserted_key = v2.inserted_key implies v1=v2)
 		always (all v1,v2:Vehicle | v1.engine=v2.engine implies v1=v2)
 		always (all v1,v2:Vehicle | v1.ignition_pos=v2.ignition_pos implies v1=v2)
+		always (all v1,v2:Vehicle | v1.rotary=v2.rotary implies v1=v2)
 	}
 	/** Predicado para inserir a chave*/
 	pred insert_key [v:Vehicle]{
@@ -49,6 +55,10 @@
 		//Frame Condition
 		v.engine:>On'= v.engine:>On
 		v.ignition_pos:>On'=v.ignition_pos:>On
+		v.rotary:>Auto' = v.rotary:>Auto
+		v.engine:>On' = v.engine:>On
+		v.rotary:>On' = v.rotary:>On
+		Auto' = Auto
 	}
 	
 	/** Predicado para inserir a chave*/
@@ -59,7 +69,9 @@
 		v.inserted_key:>On' = v.inserted_key:>On - v.inserted_key
 		// Frame-Condition
 		v.ignition_pos:>On' = v.ignition_pos:>On
-		v.engine:>On' = v.engine:>On 
+		v.engine:>On' = v.engine:>On
+		v.rotary:>On' = v.rotary:>On
+		Auto' = Auto 
 	}
 	/** Predicado para colocar a chave na ignição */
 	pred ignition_key [v:Vehicle]{
@@ -70,32 +82,76 @@
 		//Frame Condition
 		v.inserted_key:>On'=v.inserted_key:>On
 		v.engine:>On'= v.engine:>On
+		v.rotary:>On' = v.rotary:>On
+		Auto' = Auto
 		
 	}
 	
 	/** Predicado para tirar a chave da igninção*/
 	pred no_ignition_key[v:Vehicle]{
 		//Pré-condição
-		one v.ignition_pos:>On and one v.inserted_key:>On
+		one v.ignition_pos:>On and one v.inserted_key:>On and no v.engine:>On
 		//Pós-condição
 		v.ignition_pos:>On' = v.ignition_pos:>On - v.ignition_pos
 		//Frame condition
 		v.inserted_key:>On'=v.inserted_key:>On
 		v.engine:>On'= v.engine:>On
+		v.rotary:>On' = v.rotary:>On
+		Auto' = Auto
 	}
 
 
 	/** Predicado para ligar o motor chave*/
 	pred engine_start [v:Vehicle]{
 		//Pré-condição
-		one v.ignition_pos:>On
+		one v.ignition_pos:>On and no v.engine:>On
 		//Pós-Condição
 		v.engine:>On' = v.engine:>On + v.engine
 		// Frame-Condition
 		v.ignition_pos:>On' = v.ignition_pos:>On
 		v.inserted_key:>On'=v.inserted_key:>On
-		
+		v.rotary:>On' = v.rotary:>On
+		Auto' = Auto
 	}
+
+	pred engine_stop[v:Vehicle]{
+		//Pré-condição
+		one v.engine:>On and one v.ignition_pos:>On
+		//Pós-Condição
+		v.engine:>On' = v.engine:>On - v.engine
+		v.ignition_pos:>On' = v.ignition_pos:>On - v.ignition_pos
+		// Frame-Condition
+		v.inserted_key:>On'=v.inserted_key:>On
+		v.rotary:>On' = v.rotary:>On
+		Auto' = Auto
+	}
+
+	pred rotary_on[v:Vehicle]{
+		//Pré-condição
+		no v.rotary:>On
+		//Pós-condição
+		v.rotary:>On' = v.rotary:>On + v.rotary
+		v.rotary:>Auto' = v.rotary:>Auto - v.rotary
+		//Frame-Condition
+		v.ignition_pos:>On' = v.ignition_pos:>On
+		v.inserted_key:>On'=v.inserted_key:>On
+		v.engine:>On' = v.engine:>On
+
+	}
+
+	pred rotary_auto[v:Vehicle]{
+		//Pré-condição
+		no v.rotary:>Auto
+		//Pós-condição
+		v.rotary:>On' = v.rotary:>On - v.rotary
+		v.rotary:>Auto' = v.rotary:>Auto + v.rotary
+		//Frame-Condition
+		v.ignition_pos:>On' = v.ignition_pos:>On
+		v.inserted_key:>On'=v.inserted_key:>On
+		v.engine:>On' = v.engine:>On
+	}
+
+	
 
 	/** Predicado que permite ao sistema não efetuar qualquer ação*/
 	pred skip[]{
@@ -108,12 +164,14 @@
 	all e:Engine_Status| e not in On
 	all k:Inserted_Key | k not in On
 	all i:Ignition_Pos | i not in On
-	
+	all r:Rotary | r not in On
+	all r:Rotary | r not in Auto
+
 	}
 
 	fact event {
 		init 
-		always (some v:Vehicle| insert_key[v] or ignition_key[v] or engine_start[v] or 
-							remove_key[v] or no_ignition_key[v])
+		always (some v:Vehicle| rotary_on[v] or insert_key[v] or ignition_key[v] or engine_start[v] or 
+							remove_key[v] or no_ignition_key[v] or engine_stop[v] or rotary_auto[v])
 	}
  	run{} for 10 but exactly 1 USA
