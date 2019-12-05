@@ -2,167 +2,62 @@
 		----------- Definição dos conceitos base do problema -----------
 	*/
 	abstract sig Vehicle {
-		engine: one Engine_Status,
-		danger: one Danger_Button,
-		rotary: one Rotary,
-		daytime_light: one Daytime_Light,
-		pitman_arm : one Pitman_Arm
-	}
-	abstract sig Button {}
+		 engine: one Engine_Status,
+		 inserted_key : one Inserted_Key
+	}	
 	
-	sig Rotary extends Button{}
-	
-	/** 
-		------------ Definição dos tipos de veículo ---------------------
-	*/
+	/** Definição dos tipos de veículo*/
 	sig USA,EU,CAN extends Vehicle{}
-	
-	/**sig BLIN extends USA{
-		dark: one Darkness_Mode,
-	}  nao sabemos como tratar
-	*/
-	
-	/** 
-		------------ Definição do estado dos butões --------------------
-	*/
-	var sig On in Button{}
-	var sig Auto in Rotary{}
-	
-	
-	/** 
-		------------ Definição dos butões ------------------------------
-	*/
-	sig Danger_Button extends Button {} // São os 4 piscas
-	sig Darkness_Mode extends Button {} // Modo noturno que se ativa quando saimos do carro à noite
-	sig Engine_Status extends Button {} // Estado do motor
-	sig Daytime_Light extends Button {} // Funcionalidade que força a que os lowbeams estejam ligados 
-	sig Pitman_Arm    extends Button {} // Braço que permite ligar os high beams
-	 
-	/** 
-		 ----------------- Definição de predicados ---------------------- 
-	*/
-	
-	pred init {
-		/** Todos os carros iniciam com o motor desligado*/
-		no engine.On
-		no rotary.On
-		no rotary.Auto
-		no danger.On
-		no daytime_light.On
-		no pitman_arm.On
-		/** Todos os carros iniciam com as luzes desligadas*/
-	 	//no dark.On
-	
-	}
-	
-	fact belongs_to {
-		/** 
-		  Todos os veículos tem botões 
-		*/
-		all v:Vehicle| always one v.danger
-		all v:Vehicle| always one v.engine
-		all v:Vehicle| always one v.rotary
-		all v:Vehicle| always one v.daytime_light
-		all v:Vehicle| always one v.pitman_arm	
-/** 
-		Os botões e sensores apenas pertencem a um veículo
-		*/
-		all v1,v2:Vehicle | v1.danger=v2.danger implies v1=v2
-		all v1,v2:Vehicle | v1.engine=v2.engine implies v1=v2
-		all v1,v2:Vehicle | v1.rotary=v2.rotary implies v1=v2
-		all v1,v2:Vehicle | v1.daytime_light=v2.daytime_light implies v1=v2
-		all v1,v2:Vehicle | v1.pitman_arm=v2.pitman_arm implies v1=v2
-	}
-	
-	/** Garantia de que o carro liga o motor sempre*/
-	pred engine_start [v:Vehicle] {
-		//pre Condição
-		v.engine not in On
-		//Pos Condição 
-		always v.engine' in On'
-		//Frame Condition
-	    Auto' = Auto
-		On in On'
-		 
-	}
-	
-	pred engine_stop [v:Vehicle] {
-		//pre Condição
-		v.engine in On
-		//Pos Condição 
-		always v.engine' not in On' 
-		//Frame Condition
-	    Auto' = Auto
-		On in On'
-		 
-	}
-	/** Ligação das luzes */
-	pred rotary_On [v:Vehicle]{
-		//pre Condição
-		v.rotary not in On and v.engine in On
-		//Pos Condição 
-		v.rotary in On' and v.rotary not in Auto' and v.engine in On'
-		//Frame Condição?? (n sei tradução xD)
-		On in On'
-		Auto' = Auto
-	} 
-	
-	/** Ligação das luzes no modo auto quando o motor é ligado */
-	pred rotary_Auto [v:Vehicle]{
-		//pre Condição
-		v.rotary not in Auto and v.engine in On
-		//Pos Condição 
-		v.rotary in Auto' and v.rotary not in On' and v.engine in On'
-		//Frame Condição?? (n sei tradução xD)
-		On' = On
-		Auto in Auto'
-	} 
-	
-	/** Ligação das luzes */
-	pred high_Beams_On [v:Vehicle]{
-		//pre Condição
-		v.pitman_arm not in On and v.engine in On
-		//Pos Condição 
-		v.pitman_arm in On' and v.engine in On'
-		//Frame Condição?? (n sei tradução xD)
-		On in On'
-		Auto' = Auto
-	} 
 
-	pred high_Beams_Off [v:Vehicle]{
-		//pre Condição
-		v.pitman_arm in On and v.engine in On
-		//Pos Condição 
-		v.pitman_arm not in On' and v.engine in On'
-		//Frame Condição?? (n sei tradução xD)
-		On in On'
-		Auto' = Auto
-	} 
+	/** Definição dos butões */
+	abstract sig Button {}
+	var sig On in Button {}
 	
-	/** Permite ao sistema não alterar o seu estado de um trace para o outro */
-	pred skip[] {
-		On' = On
-		Auto' = Auto
-	}
+	/** Definição do estado do motor -> ON ou OFF */
+	sig Engine_Status extends Button {}
+
+	/** Definição do estado da inserção da chave -> ON-inserida ou OFF */	
+	sig  Inserted_Key extends Button {}
+
+	/** Predicado para inserir a chave*/
 	
-	/** Permite a ocorrência de uma ação de estado para estado */
-	fact event{
-		/**
-		   so se pode passar de um estado para um novo caso exista 
-		   uma operação de leitura ou de escrita
+	fact belongs {
+		/* 
+		Todos os veículos tem botões 
 		*/
-		init
-		always (all v :Vehicle | rotary_Auto[v]    or 
-								 engine_start[v]   or
-								 engine_stop[v]    or
-								 rotary_On[v]      or  
-								 high_Beams_On[v]  or
-								 high_Beams_Off[v] or 
-                                 skip[])
+		always (all v:Vehicle| always one v.inserted_key)
+		always (all v:Vehicle| always one v.engine)
+		/*
+		Os botões e sensores apenas pertencem a um veículo 
+		*/
+		always (all v1,v2 : Vehicle | v1.inserted_key = v2.inserted_key implies v1=v2)
+		always (all v1,v2:Vehicle | v1.engine=v2.engine implies v1=v2)
 	}
+	pred insert_key [v:Vehicle]{
+		
+		no v.inserted_key:>On
+		 
+		v.inserted_key:>On' = v.inserted_key:>On + v.inserted_key
+	}
+
+	pred remove_key [v:Vehicle]{
+		v.inserted_key:>On' = v.inserted_key:>On - v.inserted_key
+		
+	}
+	 
+	pred skip[]{
+	On'=On
+	Button'=Button
+	}
+	pred init{
+
+	all e:Engine_Status| e not in On
+	all k:Inserted_Key | k not in On
 	
-	
-	run{} for 15 but exactly 1 USA, exactly 1 EU, exactly 1 CAN 
-	
-	
-	
+	}
+
+	fact event {
+		init and
+		always (some v:Vehicle| insert_key[v] )
+	}
+ 	run{} for 4 but exactly 2 USA
