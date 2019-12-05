@@ -8,8 +8,8 @@
 <defaultedge/>
 
 <node>
-   <type name="BLIN"/>
    <type name="Button"/>
+   <type name="Inserted_Key"/>
    <type name="Int"/>
    <type name="String"/>
    <type name="univ"/>
@@ -28,15 +28,7 @@
    <type name="EU"/>
 </node>
 
-<node hideunconnected="yes">
-   <type name="Darkness_Mode"/>
-</node>
-
-<node hideunconnected="yes" color="Red">
-   <type name="Danger_Button"/>
-</node>
-
-<node hideunconnected="yes" showlabel="yes" showinattr="yes">
+<node hideunconnected="yes" showlabel="yes" showinattr="yes" color="Green">
    <set name="this/On" type="Button"/>
 </node>
 
