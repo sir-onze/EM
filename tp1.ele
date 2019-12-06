@@ -18,6 +18,7 @@
 	enum Button {Engine_Status, Inserted_Key, Ignition_Pos,Rotary,Low_Beam,Day_Time}
 	var sig On in Button {}
 	var sig Auto in Rotary {}
+	var sig Power_save in Low_Beam{}
 	
 
 	/** Predicado para inserir a chave*/
@@ -54,6 +55,7 @@
 		v.rotary:>On' = v.rotary:>On
 		v.rotary:>Auto' = v.rotary:>Auto		
 		v.low_beams:>On' = v.low_beams:>On
+		v.low_beams:>Power_save' = v.low_beams:>Power_save
 		v.day_time:>On' = v.day_time:>On
 	}
 	
@@ -68,6 +70,7 @@
 		v.ignition_pos:>On'=v.ignition_pos:>On
 		v.rotary:>On' = v.rotary:>On
 		v.rotary:>Auto' = v.rotary:>Auto
+		v.low_beams:>Power_save' = v.low_beams:>Power_save
 		v.low_beams:>On' = v.low_beams:>On
 		v.day_time:>On' = v.day_time:>On
 		
@@ -84,6 +87,7 @@
 		v.rotary:>On' = v.rotary:>On
 		v.rotary:>Auto' = v.rotary:>Auto
 		v.low_beams:>On' = v.low_beams:>On
+		v.low_beams:>Power_save' = v.low_beams:>Power_save
 	}
 
 	/** Predicado para ligar o motor chave*/
@@ -99,6 +103,7 @@
 		v.rotary:>Auto' = v.rotary:>Auto
 		v.low_beams:>On' = v.low_beams:>On
 		v.day_time:>On' = v.day_time:>On
+		v.low_beams:>Power_save' = v.low_beams:>Power_save
 	}
 
 	/** Predicado para desligar o motor */
@@ -114,9 +119,10 @@
 		v.rotary:>Auto' = v.rotary:>Auto
 		v.low_beams:>On' = v.low_beams:>On
 		v.day_time:>On' = v.day_time:>On
+		v.low_beams:>Power_save' = v.low_beams:>Power_save
 	}
 
-	/** Predicado para ligar o rotary */
+	/** Predicado para ligar o rotary após a chave na ignição */
 	pred rotary_on[v:Vehicle]{
 		//Pré-condição
 		v.inserted_key in On and v.ignition_pos in On
@@ -129,9 +135,25 @@
 		v.rotary:>Auto' = v.rotary:>Auto
 		v.day_time:>On' = v.day_time:>On
 		v.engine:>On' = v.engine:>On
+		v.low_beams:>Power_save' = v.low_beams:>Power_save
 	}
-	
-	/** Predicado para colocar o rotary em modo automático */
+
+	/** Predicado para ligar o rotary com a chave inserida que permite ligar os low beams em modo de save */
+	pred rotary_on_save[v:Vehicle]{
+		//Pré-condição
+		v.inserted_key in On 
+		//Pós-Condição
+		v.rotary:>On'=v.rotary:>On + v.rotary
+		v.low_beams:>Power_save' = v.low_beams:>Power_save + v.low_beams
+		// Frame-Condition
+		v.inserted_key:>On'= v.inserted_key:>On
+		v.ignition_pos:>On' = v.ignition_pos:>On
+		v.rotary:>Auto' = v.rotary:>Auto
+		v.day_time:>On' = v.day_time:>On
+		v.engine:>On' = v.engine:>On
+		v.low_beams:>On' = v.low_beams:>On
+	}
+	/** Predicado para colocar o rotary em modo automático  !!Atention!! */
 	pred rotary_auto[v:Vehicle]{
 		//Pré-condição
 		v.rotary in On
@@ -144,6 +166,7 @@
 		v.rotary:>On' = v.rotary:>On
 		v.engine:>On' = v.engine:>On
 		v.day_time:>On' = v.day_time:>On
+		v.low_beams:>Power_save' = v.low_beams:>Power_save
 	}
 	
 	pred day_time_on[v:Vehicle]{
@@ -156,6 +179,7 @@
 		v.ignition_pos:>On' = v.ignition_pos:>On
 		v.rotary:>On' = v.rotary:>On
 		v.day_time:>On' = v.day_time:>On
+		v.low_beams:>Power_save' = v.low_beams:>Power_save
 	
 	}
 	
@@ -172,13 +196,16 @@
 	all k:Inserted_Key | k not in On
 	all i:Ignition_Pos | i not in On
 	all r:Rotary	   | r not in On and r not in Auto
-	all b:Low_Beam     | b not in On
+	all b:Low_Beam     | b not in On and b not in Power_save
 	
 	}
 
 	/** Facto que permite a evolução do sistema */
 	fact event {
 		init 
-		always (some v:Vehicle| insert_key[v] or remove_key[v] or ignition_key[v] or rotary_on[v] or rotary_auto[v] or day_time_on[v] or engine_start[v] or engine_stop[v])
+		always (some v:Vehicle| insert_key[v] or remove_key[v] or ignition_key[v] 
+				or rotary_on[v] or rotary_auto[v] or day_time_on[v] or engine_start[v] 
+				or engine_stop[v] or rotary_on_save[v])
 	}
- 	run{} for 20 but exactly 1 USA
+
+ 	run{eventually USA.low_beams in Power_save } for 20 but exactly 1 USA
