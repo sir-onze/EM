@@ -208,4 +208,21 @@
 				or engine_stop[v] or rotary_on_save[v])
 	}
 
- 	run{eventually USA.low_beams in Power_save } for 20 but exactly 1 USA
+	/** Verificações dos requisitos */
+
+	assert ELS14{
+		all v:Vehicle | v.rotary + v.ignition_pos in On implies v.low_beams in On
+	}
+
+
+	assert ELS15{
+		all v:Vehicle | v.rotary + v.inserted_key in On implies v.low_beams in Power_save
+	}
+
+	
+	assert ELS16{
+		all v:Vehicle | v.rotary  in Auto && v.ignition_pos not in On implies v.low_beams not in Power_save && v.low_beams not in On
+	}
+
+
+ 	run{} for 20 but exactly 1 USA
