@@ -43,6 +43,8 @@
 		always (all v1,v2:Vehicle | v1.low_beams=v2.low_beams implies v1=v2)
 		always (all v1,v2:Vehicle | v1.day_time=v2.day_time implies v1=v2)
 	}
+
+
 	/** Predicado para inserir a chave*/
 	pred insert_key [v:Vehicle]{
 		//Pré-condição
@@ -65,6 +67,7 @@
 	 	v.inserted_key in On and v.ignition_pos not in On
 		//Pós-Condição
 		v.inserted_key:>On' = v.inserted_key:>On - v.inserted_key
+		v.day_time:>On' = v.day_time:>On - v.day_time
 		// Frame-Condition
 		v.engine:>On'= v.engine:>On
 		v.ignition_pos:>On'=v.ignition_pos:>On
@@ -72,13 +75,13 @@
 		v.rotary:>Auto' = v.rotary:>Auto
 		v.low_beams:>Power_save' = v.low_beams:>Power_save
 		v.low_beams:>On' = v.low_beams:>On
-		v.day_time:>On' = v.day_time:>On
+	
 		
 	}
 	/** Predicado para colocar a chave na ignição */
 	pred ignition_key [v:Vehicle]{
 		//Pré-condição
-		no v.ignition_pos :>On 
+		no v.ignition_pos :>On and v.inserted_key in On 
 		//Pós-Condição
 		v.ignition_pos:>On' = v.ignition_pos:>On + v.ignition_pos
 		//Frame Condition
@@ -88,12 +91,13 @@
 		v.rotary:>Auto' = v.rotary:>Auto
 		v.low_beams:>On' = v.low_beams:>On
 		v.low_beams:>Power_save' = v.low_beams:>Power_save
+		v.day_time:>On' = v.day_time:>On
 	}
 
 	/** Predicado para ligar o motor chave*/
 	pred engine_start [v:Vehicle]{
 		//Pré-condição
-		v.ignition_pos in On 
+		v.ignition_pos in On and v.day_time not in On
 		//Pós-Condição
 		v.engine:>On'=v.engine:>On+v.engine
 		// Frame-Condition
@@ -104,6 +108,21 @@
 		v.low_beams:>On' = v.low_beams:>On
 		v.day_time:>On' = v.day_time:>On
 		v.low_beams:>Power_save' = v.low_beams:>Power_save
+	}
+
+		pred engine_start_daytime [v:Vehicle]{
+		//Pré-condição
+		v.ignition_pos in On and v.day_time in On
+		//Pós-Condição
+		v.engine:>On'=v.engine:>On+v.engine
+		v.low_beams:>On' = v.low_beams:>On + v.low_beams
+		v.low_beams:>Power_save' = v.low_beams:>Power_save - v.low_beams
+		// Frame-Condition
+		v.inserted_key:>On'= v.inserted_key:>On
+		v.ignition_pos:>On' = v.ignition_pos:>On
+		v.rotary:>On' = v.rotary:>On
+		v.rotary:>Auto' = v.rotary:>Auto
+		v.day_time:>On' = v.day_time:>On
 	}
 
 	/** Predicado para desligar o motor */
@@ -129,13 +148,13 @@
 		//Pós-Condição
 		v.rotary:>On'=v.rotary:>On + v.rotary
 		v.low_beams:>On' = v.low_beams:>On + v.low_beams
+		v.low_beams:>Power_save' = v.low_beams:>Power_save - v.low_beams
 		// Frame-Condition
 		v.inserted_key:>On'= v.inserted_key:>On
 		v.ignition_pos:>On' = v.ignition_pos:>On
 		v.rotary:>Auto' = v.rotary:>Auto
 		v.day_time:>On' = v.day_time:>On
 		v.engine:>On' = v.engine:>On
-		v.low_beams:>Power_save' = v.low_beams:>Power_save
 	}
 
 	/** Predicado para ligar o rotary com a chave inserida que permite ligar os low beams em modo de save */
@@ -169,20 +188,46 @@
 		v.low_beams:>Power_save' = v.low_beams:>Power_save
 	}
 	
+	pred rotary_off[v:Vehicle]{
+		// Pré-condição
+		v.rotary in On or v.rotary in Auto
+		// Pós-condição
+		v.rotary:>On'=v.rotary:>On - v.rotary
+		v.rotary:>Auto'=v.rotary:>Auto - v.rotary
+		// Frame-Condition
+		v.engine:>On' = v.engine:>On
+		v.inserted_key:>On'= v.inserted_key:>On
+		v.ignition_pos:>On' = v.ignition_pos:>On
+		v.day_time:>On' = v.day_time:>On
+
+	}
 	pred day_time_on[v:Vehicle]{
-		//Pré-condição ??
+		//Pré-condição
+		no v.day_time:>On and v.engine in On and v.inserted_key in On
 		//Pós-Condição
 		v.day_time:>On' = v.day_time:>On + v.day_time
-		v.low_beams:>On = v.low_beams:>On + v.low_beams
+		v.low_beams:>On' = v.low_beams:>On + v.low_beams
+		v.low_beams:>Power_save' = v.low_beams:>Power_save- v.low_beams
 		//Frame Condition
 		v.inserted_key:>On'= v.inserted_key:>On
 		v.ignition_pos:>On' = v.ignition_pos:>On
 		v.rotary:>On' = v.rotary:>On
-		v.day_time:>On' = v.day_time:>On
-		v.low_beams:>Power_save' = v.low_beams:>Power_save
 	
 	}
 	
+	pred day_time_on_noEngine[v:Vehicle]{
+		//Pré-condição
+		no v.day_time:>On and v.engine not in On and v.inserted_key in On
+		//Pós-Condição
+		v.day_time:>On' = v.day_time:>On + v.day_time 
+		//Frame Condition
+		v.inserted_key:>On'= v.inserted_key:>On
+		v.ignition_pos:>On' = v.ignition_pos:>On
+		v.rotary:>On' = v.rotary:>On
+		v.low_beams:>Power_save' = v.low_beams:>Power_save
+		v.low_beams:>On' = v.low_beams:>On
+	
+	}	
 	/** Predicado que permite ao sistema não efetuar qualquer ação*/
 	pred skip[]{
 	On'=On
@@ -197,6 +242,7 @@
 	all i:Ignition_Pos | i not in On
 	all r:Rotary	   | r not in On and r not in Auto
 	all b:Low_Beam     | b not in On and b not in Power_save
+	all d:Day_Time	   | d not in On
 	
 	}
 
@@ -205,7 +251,8 @@
 		init 
 		always (some v:Vehicle| insert_key[v] or remove_key[v] or ignition_key[v] 
 				or rotary_on[v] or rotary_auto[v] or day_time_on[v] or engine_start[v] 
-				or engine_stop[v] or rotary_on_save[v])
+				or engine_stop[v] or rotary_on_save[v] or day_time_on_noEngine[v]
+				or rotary_off[v] or engine_start_daytime[v])
 	}
 
 	/** Verificações dos requisitos */
@@ -222,6 +269,10 @@
 	
 	assert ELS16{
 		all v:Vehicle | v.rotary  in Auto && v.ignition_pos not in On implies v.low_beams not in Power_save && v.low_beams not in On
+	}
+
+	assert ELS17{
+		all v:Vehicle | v.day_time in On && v.engine in On implies v.low_beams in On
 	}
 
 
