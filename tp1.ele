@@ -5,15 +5,24 @@
 		 engine: one Engine_Status,
 		 inserted_key : one Inserted_Key,
 		 ignition_pos : one Ignition_Pos,
-		 rotary : one Rotary
+		 rotary : one Rotary,
+		 lights: one Lights
 
+	}
+	abstract sig Lights {
+		lowbeam_l: one Lowbeam,
+		lowbeam_r: one Lowbeam,
+		highbeams: one Highbeam
 	}	
-	
+
 	/** Definição dos tipos de veículo*/
 	sig USA,EU,CAN extends Vehicle{}
 
 	/** Definição dos butões */
 	enum Button {Engine_Status, Inserted_Key, Ignition_Pos,Rotary}
+	enum Switch {Lowbeam, Highbeam}
+	
+	var sig Activate in Switch{}
 	var sig Auto in Rotary {}
 	var sig On in Button {}
 	
@@ -37,6 +46,9 @@
 		always (all v:Vehicle| always one v.engine)
 		always (all v:Vehicle| always one v.ignition_pos)
 		always (all v:Vehicle| always one v.rotary)
+		always (all v:Vehicle| always one v.lights)
+		always (all l:Lights | always one l.lowbeam_r)
+		always (all l:Lights | always one l.lowbeam_l)
 		
 		/**
 		Os botões e sensores apenas pertencem a um veículo 
@@ -45,6 +57,15 @@
 		always (all v1,v2:Vehicle | v1.engine=v2.engine implies v1=v2)
 		always (all v1,v2:Vehicle | v1.ignition_pos=v2.ignition_pos implies v1=v2)
 		always (all v1,v2:Vehicle | v1.rotary=v2.rotary implies v1=v2)
+		always (all v1,v2:Vehicle | v1.lights=v2.lights implies v1=v2)
+		
+		/** 
+		Tipos de luzes apenas pertencem a um sistema de luz
+		*/
+		always (all l1,l2:Lights | l1.lowbeam_r = l2.lowbeam:_r implies l1=l2)
+		always (all l1,l2:Lights | l1.lowbeam_l = l2.lowbeam:_l implies l1=l2)
+		
+			 
 	}
 	/** Predicado para inserir a chave*/
 	pred insert_key [v:Vehicle]{
@@ -101,7 +122,7 @@
 	}
 
 
-	/** Predicado para ligar o motor chave*/
+	/** Predicado para ligar o motor*/
 	pred engine_start [v:Vehicle]{
 		//Pré-condição
 		one v.ignition_pos:>On and no v.engine:>On
@@ -113,7 +134,7 @@
 		v.rotary:>On' = v.rotary:>On
 		Auto' = Auto
 	}
-
+	/** Predicado para desligar o motor*/
 	pred engine_stop[v:Vehicle]{
 		//Pré-condição
 		one v.engine:>On and one v.ignition_pos:>On
@@ -125,7 +146,8 @@
 		v.rotary:>On' = v.rotary:>On
 		Auto' = Auto
 	}
-
+	
+	/** Predicado para ligar o controlador de luzes  (Modo manual)*/
 	pred rotary_on[v:Vehicle]{
 		//Pré-condição
 		no v.rotary:>On
@@ -139,6 +161,7 @@
 
 	}
 
+	/** Predicado para ligar o controlador de luzes  (Modo Automático)*/
 	pred rotary_auto[v:Vehicle]{
 		//Pré-condição
 		no v.rotary:>Auto
@@ -150,6 +173,19 @@
 		v.inserted_key:>On'=v.inserted_key:>On
 		v.engine:>On' = v.engine:>On
 	}
+	
+	pred rotary_off[v:Vehicle]{
+		//Pré-condição
+		one v.rotary:>Auto or one v.rotary:>On
+		//Pós-condição
+		v.rotary:>On' = v.rotary:>On - v.rotary
+		v.rotary:>Auto' = v.rotary:>Auto - v.rotary
+		//Frame-Condition
+		v.ignition_pos:>On' = v.ignition_pos:>On
+		v.inserted_key:>On'=v.inserted_key:>On
+		v.engine:>On' = v.engine:>On
+	}
+
 
 	
 
@@ -172,6 +208,6 @@
 	fact event {
 		init 
 		always (some v:Vehicle| rotary_on[v] or insert_key[v] or ignition_key[v] or engine_start[v] or 
-							remove_key[v] or no_ignition_key[v] or engine_stop[v] or rotary_auto[v])
+							remove_key[v] or no_ignition_key[v] or engine_stop[v] or rotary_auto[v] or rotary_off[v])
 	}
  	run{} for 10 but exactly 1 USA
