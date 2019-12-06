@@ -1,10 +1,13 @@
-	/**
+/**
 		----------- Definição dos conceitos base do problema -----------
 	*/
 	abstract sig Vehicle {
 		 engine: one Engine_Status,
 		 inserted_key : one Inserted_Key,
-		 ignition_pos : one Ignition_Pos
+		 ignition_pos : one Ignition_Pos,
+		 rotary 	  : one Rotary,
+		 low_beams    : one Low_Beam,
+		 day_time     : one Day_Time
 
 	}	
 	
@@ -12,17 +15,10 @@
 	sig USA,EU,CAN extends Vehicle{}
 
 	/** Definição dos butões */
-	enum Button {Engine_Status, Inserted_Key, Ignition_Pos}
+	enum Button {Engine_Status, Inserted_Key, Ignition_Pos,Rotary,Low_Beam,Day_Time}
 	var sig On in Button {}
+	var sig Auto in Rotary {}
 	
-	/** Definição do estado do motor -> ON ou OFF */
-//	sig Engine_Status extends Button {}
-
-	/** Definição do estado da inserção da chave -> ON-inserida ou OFF */	
-//	sig  Inserted_Key extends Button {}
-	
-	/** Definição do estado da posição da chave na ingnição -> ON-inserida ou OFF */
-//	sig  Ignition_Pos extends Button {}
 
 	/** Predicado para inserir a chave*/
 	
@@ -33,12 +29,18 @@
 		always (all v:Vehicle| always one v.inserted_key)
 		always (all v:Vehicle| always one v.engine)
 		always (all v:Vehicle| always one v.ignition_pos)
+		always (all v:Vehicle| always one v.rotary)
+		always (all v:Vehicle| always one v.low_beams)
+		always (all v:Vehicle| always one v.day_time)
 		/**
 		Os botões e sensores apenas pertencem a um veículo 
 		*/
 		always (all v1,v2 : Vehicle | v1.inserted_key = v2.inserted_key implies v1=v2)
 		always (all v1,v2:Vehicle | v1.engine=v2.engine implies v1=v2)
 		always (all v1,v2:Vehicle | v1.ignition_pos=v2.ignition_pos implies v1=v2)
+		always (all v1,v2:Vehicle | v1.rotary=v2.rotary implies v1=v2)
+		always (all v1,v2:Vehicle | v1.low_beams=v2.low_beams implies v1=v2)
+		always (all v1,v2:Vehicle | v1.day_time=v2.day_time implies v1=v2)
 	}
 	/** Predicado para inserir a chave*/
 	pred insert_key [v:Vehicle]{
@@ -49,55 +51,134 @@
 		//Frame Condition
 		v.engine:>On'= v.engine:>On
 		v.ignition_pos:>On'=v.ignition_pos:>On
+		v.rotary:>On' = v.rotary:>On
+		v.rotary:>Auto' = v.rotary:>Auto		
+		v.low_beams:>On' = v.low_beams:>On
+		v.day_time:>On' = v.day_time:>On
 	}
 	
 	/** Predicado para inserir a chave*/
 	pred remove_key [v:Vehicle]{
 		//Pré-condição
-		one v.inserted_key:>On
+	 	v.inserted_key in On and v.ignition_pos not in On
 		//Pós-Condição
 		v.inserted_key:>On' = v.inserted_key:>On - v.inserted_key
 		// Frame-Condition
+		v.engine:>On'= v.engine:>On
+		v.ignition_pos:>On'=v.ignition_pos:>On
+		v.rotary:>On' = v.rotary:>On
+		v.rotary:>Auto' = v.rotary:>Auto
+		v.low_beams:>On' = v.low_beams:>On
+		v.day_time:>On' = v.day_time:>On
 		
 	}
 	/** Predicado para colocar a chave na ignição */
 	pred ignition_key [v:Vehicle]{
 		//Pré-condição
-		no v.ignition_pos :>On and one v.inserted_key:>On
+		no v.ignition_pos :>On 
 		//Pós-Condição
 		v.ignition_pos:>On' = v.ignition_pos:>On + v.ignition_pos
 		//Frame Condition
-		v.inserted_key:>On'=v.inserted_key:>On
+		v.inserted_key:>On'= v.inserted_key:>On
 		v.engine:>On'= v.engine:>On
-		
+		v.rotary:>On' = v.rotary:>On
+		v.rotary:>Auto' = v.rotary:>Auto
+		v.low_beams:>On' = v.low_beams:>On
 	}
 
 	/** Predicado para ligar o motor chave*/
 	pred engine_start [v:Vehicle]{
 		//Pré-condição
-		
+		v.ignition_pos in On 
 		//Pós-Condição
-	
+		v.engine:>On'=v.engine:>On+v.engine
 		// Frame-Condition
-		
+		v.inserted_key:>On'= v.inserted_key:>On
+		v.ignition_pos:>On' = v.ignition_pos:>On
+		v.rotary:>On' = v.rotary:>On
+		v.rotary:>Auto' = v.rotary:>Auto
+		v.low_beams:>On' = v.low_beams:>On
+		v.day_time:>On' = v.day_time:>On
 	}
 
+	/** Predicado para desligar o motor */
+	pred engine_stop [v:Vehicle]{
+		//Pré-condição
+		v.engine in On
+		//Pós-Condição
+		v.engine:>On'=v.engine:>On-v.engine
+		// Frame-Condition
+		v.inserted_key:>On'= v.inserted_key:>On
+		v.ignition_pos:>On' = v.ignition_pos:>On
+		v.rotary:>On' = v.rotary:>On
+		v.rotary:>Auto' = v.rotary:>Auto
+		v.low_beams:>On' = v.low_beams:>On
+		v.day_time:>On' = v.day_time:>On
+	}
+
+	/** Predicado para ligar o rotary */
+	pred rotary_on[v:Vehicle]{
+		//Pré-condição
+		v.inserted_key in On and v.ignition_pos in On
+		//Pós-Condição
+		v.rotary:>On'=v.rotary:>On + v.rotary
+		v.low_beams:>On' = v.low_beams:>On + v.low_beams
+		// Frame-Condition
+		v.inserted_key:>On'= v.inserted_key:>On
+		v.ignition_pos:>On' = v.ignition_pos:>On
+		v.rotary:>Auto' = v.rotary:>Auto
+		v.day_time:>On' = v.day_time:>On
+		v.engine:>On' = v.engine:>On
+	}
+	
+	/** Predicado para colocar o rotary em modo automático */
+	pred rotary_auto[v:Vehicle]{
+		//Pré-condição
+		v.rotary in On
+		//Pós-condição
+		v.rotary:>On'=v.rotary:>On - v.rotary
+		v.low_beams:>On' = v.low_beams:>On + v.low_beams
+		// Frame-Condition
+		v.inserted_key:>On'= v.inserted_key:>On
+		v.ignition_pos:>On' = v.ignition_pos:>On
+		v.rotary:>On' = v.rotary:>On
+		v.engine:>On' = v.engine:>On
+		v.day_time:>On' = v.day_time:>On
+	}
+	
+	pred day_time_on[v:Vehicle]{
+		//Pré-condição ??
+		//Pós-Condição
+		v.day_time:>On' = v.day_time:>On + v.day_time
+		v.low_beams:>On = v.low_beams:>On + v.low_beams
+		//Frame Condition
+		v.inserted_key:>On'= v.inserted_key:>On
+		v.ignition_pos:>On' = v.ignition_pos:>On
+		v.rotary:>On' = v.rotary:>On
+		v.day_time:>On' = v.day_time:>On
+	
+	}
+	
 	/** Predicado que permite ao sistema não efetuar qualquer ação*/
 	pred skip[]{
 	On'=On
 	Button'=Button
 	}
 
+	/** Inicialização do modelo */
 	pred init{
 
 	all e:Engine_Status| e not in On
 	all k:Inserted_Key | k not in On
 	all i:Ignition_Pos | i not in On
+	all r:Rotary	   | r not in On and r not in Auto
+	all b:Low_Beam     | b not in On
 	
 	}
 
+	/** Facto que permite a evolução do sistema */
 	fact event {
 		init 
-		always (some v:Vehicle| insert_key[v] or remove_key[v] or ignition_key[v])
+		always (some v:Vehicle| insert_key[v] or remove_key[v] or ignition_key[v] or rotary_on[v] or rotary_auto[v] or day_time_on[v] or engine_start[v] or engine_stop[v])
 	}
- 	run{} for 10 but exactly 1 USA
+ 	run{} for 20 but exactly 1 USA
