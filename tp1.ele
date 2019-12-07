@@ -251,12 +251,15 @@
 		v.exterior_bright:>LX_high' = v.exterior_bright:>LX_high
 		v.exterior_bright:>LX_low' = v.exterior_bright:>LX_low
 	}
+	/** Rotary off */
 	pred rotary_off[v:Vehicle]{
 		// Pré-condição
 		v.rotary in On or v.rotary in Auto
 		// Pós-condição
 		v.rotary:>On'=v.rotary:>On - v.rotary
 		v.rotary:>Auto'=v.rotary:>Auto - v.rotary
+		v.low_beams:>On'= v.low_beams:>On - v.low_beams
+		v.low_beams:>Power_save'= v.low_beams:>Power_save - v.low_beams
 		// Frame-Condition
 		v.engine:>On' = v.engine:>On
 		v.inserted_key:>On'= v.inserted_key:>On
