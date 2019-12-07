@@ -8,7 +8,6 @@
 		 rotary 	  : one Rotary,
 		 low_beams    : one Low_Beam,
 		 day_time     : one Day_Time
-
 	}	
 	
 	/** Definição dos tipos de veículo*/
@@ -131,9 +130,9 @@
 		v.engine in On
 		//Pós-Condição
 		v.engine:>On'=v.engine:>On-v.engine
+		v.ignition_pos:>On' = v.ignition_pos:>On - v.ignition_pos
 		// Frame-Condition
 		v.inserted_key:>On'= v.inserted_key:>On
-		v.ignition_pos:>On' = v.ignition_pos:>On
 		v.rotary:>On' = v.rotary:>On
 		v.rotary:>Auto' = v.rotary:>Auto
 		v.low_beams:>On' = v.low_beams:>On
@@ -214,7 +213,9 @@
 		v.rotary:>On' = v.rotary:>On
 	
 	}
-	
+
+	/** Predicado que permite ativar o day time com o motor desligado */
+
 	pred day_time_on_noEngine[v:Vehicle]{
 		//Pré-condição
 		no v.day_time:>On and v.engine not in On and v.inserted_key in On
@@ -223,6 +224,7 @@
 		//Frame Condition
 		v.inserted_key:>On'= v.inserted_key:>On
 		v.ignition_pos:>On' = v.ignition_pos:>On
+		v.engine:>On' = v.engine:>On // faltava aqui 
 		v.rotary:>On' = v.rotary:>On
 		v.low_beams:>Power_save' = v.low_beams:>Power_save
 		v.low_beams:>On' = v.low_beams:>On
@@ -276,4 +278,4 @@
 	}
 
 
- 	run{} for 20 but exactly 1 USA
+ 	run{eventually Vehicle.engine in On} for 20 but exactly 1 USA
