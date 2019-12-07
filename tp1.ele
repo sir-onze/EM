@@ -47,6 +47,10 @@
 		always (all v1,v2:Vehicle | v1.low_beams=v2.low_beams implies v1=v2)
 		always (all v1,v2:Vehicle | v1.day_time=v2.day_time implies v1=v2)
 		always (all v1,v2:Vehicle | v1.exterior_bright=v2.exterior_bright implies v1=v2)
+		/**
+		Garantia de que o sensor exterior apenas pode resgistar um tipo de leitura
+		 */
+		always (all e1:Exterior_Brightness | e1 in LX_high implies not e1 in LX_low)
 	}
 
 
@@ -165,11 +169,11 @@
 		//Pós-Condição
 		v.rotary:>On'=v.rotary:>On + v.rotary
 		v.low_beams:>On' = v.low_beams:>On + v.low_beams
+		v.rotary:>Auto' = v.rotary:>Auto - v.rotary
 		v.low_beams:>Power_save' = v.low_beams:>Power_save - v.low_beams
 		// Frame-Condition
 		v.inserted_key:>On'= v.inserted_key:>On
 		v.ignition_pos:>On' = v.ignition_pos:>On
-		v.rotary:>Auto' = v.rotary:>Auto
 		v.day_time:>On' = v.day_time:>On
 		v.engine:>On' = v.engine:>On
 		v.exterior_bright:>LX_high' = v.exterior_bright:>LX_high
@@ -182,28 +186,29 @@
 		v.inserted_key in On 
 		//Pós-Condição
 		v.rotary:>On'=v.rotary:>On + v.rotary
+		v.rotary:>Auto' = v.rotary:>Auto - v.rotary
 		v.low_beams:>Power_save' = v.low_beams:>Power_save + v.low_beams
 		// Frame-Condition
 		v.inserted_key:>On'= v.inserted_key:>On
 		v.ignition_pos:>On' = v.ignition_pos:>On
-		v.rotary:>Auto' = v.rotary:>Auto
 		v.day_time:>On' = v.day_time:>On
 		v.engine:>On' = v.engine:>On
 		v.low_beams:>On' = v.low_beams:>On
 		v.exterior_bright:>LX_high' = v.exterior_bright:>LX_high
 		v.exterior_bright:>LX_low' = v.exterior_bright:>LX_low
 	}
-	/** Predicado para colocar o rotary em modo automático  !!Atention!! */
-	pred rotary_auto[v:Vehicle]{
+
+	/** Predicado para colocar o rotary em modo automático quando a luminosidade está alta ELS 18 !!Atention!! */
+	pred rotary_auto_high_brigth[v:Vehicle]{
 		//Pré-condição
-		v.rotary in On
+		v.ignition_pos in On and v.exterior_bright in LX_high
 		//Pós-condição
 		v.rotary:>On'=v.rotary:>On - v.rotary
-		v.low_beams:>On' = v.low_beams:>On + v.low_beams
+		v.rotary:>Auto'= v.rotary:>Auto + v.rotary
+		v.low_beams:>On' = v.low_beams:>On - v.low_beams
 		// Frame-Condition
 		v.inserted_key:>On'= v.inserted_key:>On
 		v.ignition_pos:>On' = v.ignition_pos:>On
-		v.rotary:>On' = v.rotary:>On
 		v.engine:>On' = v.engine:>On
 		v.day_time:>On' = v.day_time:>On
 		v.low_beams:>Power_save' = v.low_beams:>Power_save
@@ -211,6 +216,41 @@
 		v.exterior_bright:>LX_low' = v.exterior_bright:>LX_low
 	}
 	
+	/** Predicado para colocar o rotary em modo automático quando a luminosidade está baixa ELS 18 !!Atention!! */
+	pred rotary_auto_low_brigth[v:Vehicle]{
+		//Pré-condição
+		v.ignition_pos in On and v.exterior_bright in LX_low
+		//Pós-condição
+		v.rotary:>On'=v.rotary:>On - v.rotary
+		v.rotary:>Auto'= v.rotary:>Auto + v.rotary
+		v.low_beams:>On' = v.low_beams:>On + v.low_beams
+		// Frame-Condition
+		v.inserted_key:>On'= v.inserted_key:>On
+		v.ignition_pos:>On' = v.ignition_pos:>On
+		v.engine:>On' = v.engine:>On
+		v.day_time:>On' = v.day_time:>On
+		v.low_beams:>Power_save' = v.low_beams:>Power_save
+		v.exterior_bright:>LX_high' = v.exterior_bright:>LX_high
+		v.exterior_bright:>LX_low' = v.exterior_bright:>LX_low
+	}
+
+	/** Predicado para colocar o rotary em modo automático  !!Atention!! */
+	pred rotary_auto_not_ignition[v:Vehicle]{
+		//Pré-condição
+		v.ignition_pos not in On and (v.exterior_bright in LX_low or v.exterior_bright in LX_high)
+		//Pós-condição
+		v.rotary:>On'=v.rotary:>On - v.rotary
+		v.rotary:>Auto'=v.rotary:>Auto + v.rotary
+		// Frame-Condition
+		v.inserted_key:>On'= v.inserted_key:>On
+		v.ignition_pos:>On' = v.ignition_pos:>On
+		v.engine:>On' = v.engine:>On
+		v.day_time:>On' = v.day_time:>On
+		v.low_beams:>Power_save' = v.low_beams:>Power_save
+		v.low_beams:>On' = v.low_beams:>On
+		v.exterior_bright:>LX_high' = v.exterior_bright:>LX_high
+		v.exterior_bright:>LX_low' = v.exterior_bright:>LX_low
+	}
 	pred rotary_off[v:Vehicle]{
 		// Pré-condição
 		v.rotary in On or v.rotary in Auto
@@ -278,16 +318,16 @@
 	all r:Rotary	   | r not in On and r not in Auto
 	all b:Low_Beam     | b not in On and b not in Power_save
 	all d:Day_Time	   | d not in On
-	
 	}
 
 	/** Facto que permite a evolução do sistema */
 	fact event {
 		init 
 		always (some v:Vehicle| insert_key[v] or remove_key[v] or ignition_key[v] 
-				or rotary_on[v] or rotary_auto[v] or day_time_on[v] or engine_start[v] 
+				or rotary_on[v] or day_time_on[v] or engine_start[v] 
 				or engine_stop[v] or rotary_on_save[v] or day_time_on_noEngine[v]
-				or rotary_off[v] or engine_start_daytime[v])
+				or rotary_off[v] or engine_start_daytime[v] or rotary_auto_high_brigth[v]
+				or rotary_auto_low_brigth[v] or rotary_auto_not_ignition[v] )
 	}
 
 	/** Verificações dos requisitos */
@@ -310,5 +350,10 @@
 		all v:Vehicle | v.day_time in On && v.engine in On implies v.low_beams in On
 	}
 
-
- 	run{eventually Vehicle.engine in On} for 20 but exactly 1 USA
+	assert ELS18{
+		all v:Vehicle | ((v.rotary in Auto && v.ignition_pos in On && v.exterior_bright in LX_low) implies v.low_beams in On) and
+						((v.rotary in Auto && v.ignition_pos in On && v.exterior_bright in LX_high) implies v.low_beams not in On)
+	}
+	
+	//check ELS18
+ 	run{ } for 20 but exactly 1 USA
