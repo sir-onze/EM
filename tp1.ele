@@ -103,6 +103,7 @@
 		(v.exterior_bright not in LX_high and v.exterior_bright not in LX_low))
 		//Pós-Condição
 		v.ignition_pos:>On' = v.ignition_pos:>On + v.ignition_pos
+		v.low_beams:>Power_save' = v.low_beams:>Power_save - v.low_beams
 		//Frame Condition
 		v.inserted_key:>On'= v.inserted_key:>On
 		v.engine:>On'= v.engine:>On
@@ -116,7 +117,7 @@
 		v.ambient_light:>On' = v.ambient_light:>On
 	}
 
-		/** Predicado para colocar a chave na ignição */
+	/** Predicado para colocar a chave na ignição com rotary em Auto e com luz exterior alta */
 	pred ignition_key_LX250[v:Vehicle]{
 		//Pré-condição
 		no v.ignition_pos :>On and v.inserted_key in On  and v.rotary in Auto
@@ -136,7 +137,7 @@
 		v.ambient_light:>On' = v.ambient_light:>On
 	}
 	
-	/** Predicado para colocar a chave na ignição */
+	/** Predicado para colocar a chave na ignição com rotary em Auto e com luz exterior baixa */
 	pred ignition_key_LX200[v:Vehicle]{
 		//Pré-condição
 		no v.ignition_pos :>On and v.inserted_key in On  and v.rotary in Auto
@@ -156,7 +157,7 @@
 		v.ambient_light:>On' = v.ambient_light:>On
 	}
 
-	/** Predicado para ligar o motor chave*/
+	/** Predicado para ligar o motor chave sem o daytime ativo*/
 	pred engine_start [v:Vehicle]{
 		//Pré-condição
 		v.ignition_pos in On and v.day_time not in On
@@ -174,7 +175,7 @@
 		v.exterior_bright:>LX_low' = v.exterior_bright:>LX_low
 		v.ambient_light:>On' = v.ambient_light:>On
 	}
-
+		/** Predicado para ligar o motor quando o daytime está ativo */
 		pred engine_start_daytime [v:Vehicle]{
 		//Pré-condição
 		v.ignition_pos in On and v.day_time in On
@@ -196,7 +197,7 @@
 	/** Predicado para desligar o motor */
 	pred engine_stop [v:Vehicle]{
 		//Pré-condição
-		v.engine in On and v.ambient_light not in On
+		v.engine in On and v.ambient_light not in On and v.rotary not in On+Auto
 		//Pós-Condição
 		v.engine:>On'=v.engine:>On-v.engine
 		v.ignition_pos:>On' = v.ignition_pos:>On - v.ignition_pos
@@ -211,7 +212,8 @@
 		v.exterior_bright:>LX_low' = v.exterior_bright:>LX_low
 		v.ambient_light:>On' = v.ambient_light:>On	
 	}
-
+	
+	/** Predicado para desligar o motor caso o ambient light esteja ativo*/
 	pred engine_stop_ab_on [v:Vehicle]{
 		//Pré-condição
 		v.engine in On  and v.ambient_light in On
@@ -225,6 +227,43 @@
 		v.rotary:>Auto' = v.rotary:>Auto
 		v.day_time:>On' = v.day_time:>On
 		v.low_beams:>Power_save' = v.low_beams:>Power_save
+		v.exterior_bright:>LX_high' = v.exterior_bright:>LX_high
+		v.exterior_bright:>LX_low' = v.exterior_bright:>LX_low
+		v.ambient_light:>On' = v.ambient_light:>On	
+	}
+		
+	/** Predicado para desligar o motor caso o rotary esteja ligado*/
+		pred engine_stop_rotary_on [v:Vehicle]{
+		//Pré-condição
+		v.engine in On  and v.ambient_light not in On and v.rotary in On
+		//Pós-Condição
+		v.engine:>On'=v.engine:>On-v.engine
+		v.ignition_pos:>On' = v.ignition_pos:>On - v.ignition_pos
+		v.low_beams:>On' = v.low_beams:>On - v.low_beams
+		v.low_beams:>Power_save' = v.low_beams:>Power_save + v.low_beams
+		// Frame-Condition
+		v.inserted_key:>On'= v.inserted_key:>On
+		v.rotary:>On' = v.rotary:>On
+		v.rotary:>Auto' = v.rotary:>Auto
+		v.day_time:>On' = v.day_time:>On
+		v.exterior_bright:>LX_high' = v.exterior_bright:>LX_high
+		v.exterior_bright:>LX_low' = v.exterior_bright:>LX_low
+		v.ambient_light:>On' = v.ambient_light:>On	
+	}
+
+	pred engine_stop_rotary_auto [v:Vehicle]{
+		//Pré-condição
+		v.engine in On  and v.ambient_light not in On and v.rotary in Auto
+		//Pós-Condição
+		v.engine:>On'=v.engine:>On-v.engine
+		v.ignition_pos:>On' = v.ignition_pos:>On - v.ignition_pos
+		v.low_beams:>On' = v.low_beams:>On - v.low_beams
+		v.low_beams:>Power_save' = v.low_beams:>Power_save - v.low_beams
+		// Frame-Condition
+		v.inserted_key:>On'= v.inserted_key:>On
+		v.rotary:>On' = v.rotary:>On
+		v.rotary:>Auto' = v.rotary:>Auto
+		v.day_time:>On' = v.day_time:>On
 		v.exterior_bright:>LX_high' = v.exterior_bright:>LX_high
 		v.exterior_bright:>LX_low' = v.exterior_bright:>LX_low
 		v.ambient_light:>On' = v.ambient_light:>On	
@@ -252,7 +291,7 @@
 	/** Predicado para ligar o rotary com a chave inserida que permite ligar os low beams em modo de save */
 	pred rotary_on_save[v:Vehicle]{
 		//Pré-condição
-		v.inserted_key in On and  v.ambient_light not in On
+		v.inserted_key in On and v.ignition_pos not in On and  v.ambient_light not in On
 		//Pós-Condição
 		v.rotary:>On'=v.rotary:>On + v.rotary
 		v.rotary:>Auto' = v.rotary:>Auto - v.rotary
@@ -313,14 +352,14 @@
 		v.ignition_pos not in On
 		//Pós-condição
 		v.rotary:>On'=v.rotary:>On - v.rotary
+		v.low_beams:>Power_save' = v.low_beams:>Power_save - v.low_beams
+		v.low_beams:>On' = v.low_beams:>On - v.low_beams
 		v.rotary:>Auto'=v.rotary:>Auto + v.rotary
 		// Frame-Condition
 		v.inserted_key:>On'= v.inserted_key:>On
 		v.ignition_pos:>On' = v.ignition_pos:>On
 		v.engine:>On' = v.engine:>On
 		v.day_time:>On' = v.day_time:>On
-		v.low_beams:>Power_save' = v.low_beams:>Power_save
-		v.low_beams:>On' = v.low_beams:>On
 		v.exterior_bright:>LX_high' = v.exterior_bright:>LX_high
 		v.exterior_bright:>LX_low' = v.exterior_bright:>LX_low
 		v.ambient_light:>On' = v.ambient_light:>On	
@@ -356,6 +395,7 @@
 		v.inserted_key:>On'= v.inserted_key:>On
 		v.ignition_pos:>On' = v.ignition_pos:>On
 		v.rotary:>On' = v.rotary:>On
+		v.rotary:>Auto' = v.rotary:>Auto
 		v.exterior_bright:>LX_high' = v.exterior_bright:>LX_high
 		v.exterior_bright:>LX_low' = v.exterior_bright:>LX_low
 		v.ambient_light:>On' = v.ambient_light:>On	
@@ -375,6 +415,7 @@
 		v.ignition_pos:>On' = v.ignition_pos:>On
 		v.engine:>On' = v.engine:>On
 		v.rotary:>On' = v.rotary:>On
+		v.rotary:>Auto' = v.rotary:>Auto
 		v.low_beams:>Power_save' = v.low_beams:>Power_save
 		v.low_beams:>On' = v.low_beams:>On
 		v.exterior_bright:>LX_high' = v.exterior_bright:>LX_high
@@ -445,23 +486,25 @@
 				or rotary_off[v] or engine_start_daytime[v] or rotary_auto_high_brigth[v]
 				or rotary_auto_low_brigth[v] or rotary_auto_not_ignition[v]
 				or  ignition_key_LX250[v] or ignition_key_LX200[v] or ambient_light[v]
-				or engine_stop_ab_on [v] or ambient_light_eb[v])
+				or engine_stop_ab_on [v] or ambient_light_eb[v] or engine_stop_rotary_on[v] or engine_stop_rotary_auto[v])
 	}
 
 	/** Verificações dos requisitos */
 
 	assert ELS14{
-		all v:Vehicle | v.rotary + v.ignition_pos in On implies v.low_beams in On
+		always (all v:Vehicle | v.rotary + v.ignition_pos in On implies v.low_beams in On)
 	}
 
 
 	assert ELS15{
-		all v:Vehicle | v.rotary + v.inserted_key in On implies v.low_beams in Power_save
+		always (all v:Vehicle | v.rotary + v.inserted_key in On and v.ignition_pos not in On 
+						   and v.ambient_light not in On implies v.low_beams in Power_save)
 	}
 
 	
 	assert ELS16{
-		all v:Vehicle | v.rotary  in Auto && v.ignition_pos not in On implies v.low_beams not in Power_save && v.low_beams not in On
+		always (all v:Vehicle | v.rotary  in Auto && v.ignition_pos not in On 
+						   and v.ambient_light not in On implies v.low_beams not in Power_save && v.low_beams not in On)
 	}
 
 	assert ELS17{
@@ -476,6 +519,5 @@
 	assert ELS19{
 		all v:Vehicle | v.engine not in On && v.ambient_light in On && v.exterior_bright in LX_low implies v.low_beams in On
 	}
-	
 
- 	run{eventually USA.ambient_light in On } for 20 but exactly 1 USA
+ 	run{} for 20 but exactly 1 USA
