@@ -1,5 +1,8 @@
 /**
 		----------- Definição dos conceitos base do problema -----------
+
+	(1) Engine -> A modelação que foi feita para simular o estado do motor, ligado On ou não ligado, caso não
+	esteja no estado On;
 	(2) Inserted_key -> A modelação que foi feita para simular o estado de inserção ou não da chave no carro;
 	(3) Ignition_Pos -> A modelação que foi feita para simular a posição da chave, após inserida, na ignição
 	do carro;
