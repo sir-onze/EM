@@ -1,15 +1,27 @@
 /**
 		----------- Definição dos conceitos base do problema -----------
+	(2) Inserted_key -> A modelação que foi feita para simular o estado de inserção ou não da chave no carro;
+	(3) Ignition_Pos -> A modelação que foi feita para simular a posição da chave, após inserida, na ignição
+	do carro;
+	(4) Rotary -> A modelação que foi feita para simular o rotary que está no documento analisado, sendo que 
+	pode estar no estado ON,não estar no On que para o modelo siginifica estar Off e no Auto
+	(5) Low Beams -> Representam os low beams presentes no documento, pode estar no On ou caso não estejam no
+	On, para o modelação feita significa que estão desligados
+	(6) Day Time -> É a representação referida no documento como "daytime  running  light"
+	(7) Exterior Brigthness -> A modelação que foi feita para representar os valores obtidos pelos sensores
+	de lumninosidade referidos no documento, o estado LX_HIGH representa os valores acima de 250LX e o LX_LOW
+	representam os valores inferiores a 200LX 
+	(8) Ambient Light -> É a representação para o termo com o mesmo nome referido no documento
 	*/
 	abstract sig Vehicle {
-		 engine: one Engine_Status,
+		 engine          : one Engine_Status,
 		 inserted_key    : one Inserted_Key,
 		 ignition_pos    : one Ignition_Pos,
 		 rotary 	     : one Rotary,
 		 low_beams       : one Low_Beam,
 		 day_time        : one Day_Time,
 		 exterior_bright : one Exterior_Brightness,
-		ambient_light: one Ambient_Light
+	   	 ambient_light   : one Ambient_Light
 	}	
 	
 	/** Definição dos tipos de veículo*/
@@ -175,10 +187,56 @@
 		v.exterior_bright:>LX_low' = v.exterior_bright:>LX_low
 		v.ambient_light:>On' = v.ambient_light:>On
 	}
+
+	/** Predicado para ligar o motor com a exterior brigthness em High - 
+		essencial para o ELS 18
+	 */
+
+	pred engine_start_brigth_high [v:Vehicle]{
+		//Pré-condição
+		v.ignition_pos in On and v.exterior_bright in LX_high
+		//Pós-Condição
+		v.engine:>On'=v.engine:>On+v.engine
+		v.low_beams:>On' = v.low_beams:>On-v.low_beams
+		// Frame-Condition
+		v.inserted_key:>On'= v.inserted_key:>On
+		v.ignition_pos:>On' = v.ignition_pos:>On
+		v.rotary:>On' = v.rotary:>On
+		v.rotary:>Auto' = v.rotary:>Auto
+		v.low_beams:>On' = v.low_beams:>On
+		v.day_time:>On' = v.day_time:>On
+		v.low_beams:>Power_save' = v.low_beams:>Power_save
+		v.exterior_bright:>LX_high' = v.exterior_bright:>LX_high
+		v.exterior_bright:>LX_low' = v.exterior_bright:>LX_low
+		v.ambient_light:>On' = v.ambient_light:>On
+	}
+
+	/** Predicado para ligar o motor com a exterior brigthness em High
+		e com o rotary em auto - essencial para o ELS 18
+	 */
+		pred engine_start_brigth_high_rotary_auto [v:Vehicle]{
+		//Pré-condição
+		v.ignition_pos in On and v.exterior_bright in LX_high and v.rotary in Auto and v.day_time in On
+		//Pós-Condição
+		v.engine:>On'=v.engine:>On+v.engine
+		// Frame-Condition
+		v.low_beams:>On' = v.low_beams:>On
+		v.inserted_key:>On'= v.inserted_key:>On
+		v.ignition_pos:>On' = v.ignition_pos:>On
+		v.rotary:>On' = v.rotary:>On
+		v.rotary:>Auto' = v.rotary:>Auto
+		v.low_beams:>On' = v.low_beams:>On
+		v.day_time:>On' = v.day_time:>On
+		v.low_beams:>Power_save' = v.low_beams:>Power_save
+		v.exterior_bright:>LX_high' = v.exterior_bright:>LX_high
+		v.exterior_bright:>LX_low' = v.exterior_bright:>LX_low
+		v.ambient_light:>On' = v.ambient_light:>On
+	}
+
 		/** Predicado para ligar o motor quando o daytime está ativo */
 		pred engine_start_daytime [v:Vehicle]{
 		//Pré-condição
-		v.ignition_pos in On and v.day_time in On
+		v.ignition_pos in On and v.day_time in On and v.exterior_bright not in LX_high
 		//Pós-Condição
 		v.engine:>On'=v.engine:>On+v.engine
 		v.low_beams:>On' = v.low_beams:>On + v.low_beams
@@ -431,7 +489,7 @@
 	pred day_time_on[v:Vehicle]{
 		//Pré-condição
 		no v.day_time:>On and v.engine in On and v.inserted_key in On
-		and v.ambient_light not in On
+		and v.ambient_light not in On and v.exterior_bright not in LX_high
 		//Pós-Condição
 		v.day_time:>On' = v.day_time:>On + v.day_time
 		v.low_beams:>On' = v.low_beams:>On + v.low_beams
@@ -446,13 +504,35 @@
 		v.ambient_light:>On' = v.ambient_light:>On	
 	
 	}
+	
+	/** Predicado que permite alterar o estado do day_time para On 
+		quando a luminosidade está em High
+	 */
+	pred day_time_on_brigth_high[v:Vehicle]{
+		//Pré-condição
+		no v.day_time:>On and v.engine in On and v.inserted_key in On
+		and v.ambient_light not in On and v.exterior_bright not in LX_high
+		and v.rotary not in Auto 
+		//Pós-Condição
+		v.day_time:>On' = v.day_time:>On + v.day_time
+		v.low_beams:>Power_save' = v.low_beams:>Power_save- v.low_beams
+		//Frame Condition
+		v.low_beams:>On' = v.low_beams:>On
+		v.inserted_key:>On'= v.inserted_key:>On
+		v.ignition_pos:>On' = v.ignition_pos:>On
+		v.rotary:>On' = v.rotary:>On
+		v.rotary:>Auto' = v.rotary:>Auto
+		v.exterior_bright:>LX_high' = v.exterior_bright:>LX_high
+		v.exterior_bright:>LX_low' = v.exterior_bright:>LX_low
+		v.ambient_light:>On' = v.ambient_light:>On	
+	
+	}
 
 	/** Predicado que permite ativar o day time com o motor desligado */
-
 	pred day_time_on_noEngine[v:Vehicle]{
 		//Pré-condição
 		no v.day_time:>On and v.engine not in On and v.inserted_key in On
-		and v.ambient_light not in On
+		and v.ambient_light not in On and v.rotary not in Auto
 		//Pós-Condição
 		v.day_time:>On' = v.day_time:>On + v.day_time 
 		//Frame Condition
@@ -463,6 +543,52 @@
 		v.rotary:>Auto' = v.rotary:>Auto
 		v.low_beams:>Power_save' = v.low_beams:>Power_save
 		v.low_beams:>On' = v.low_beams:>On
+		v.exterior_bright:>LX_high' = v.exterior_bright:>LX_high
+		v.exterior_bright:>LX_low' = v.exterior_bright:>LX_low
+		v.ambient_light:>On' = v.ambient_light:>On
+	}
+	
+	/** Predicado que permite ligar o day_time com o engine desligado e a 
+		brightness em High
+	*/
+	pred day_time_on_rotary_auto[v:Vehicle]{
+		//Pré-condição
+		no v.day_time:>On and v.engine not in On and v.inserted_key in On 
+		and v.exterior_bright not in LX_high
+		and v.ambient_light not in On and v.rotary in Auto
+		//Pós-Condição
+		v.day_time:>On' = v.day_time:>On + v.day_time 
+		//Frame Condition
+		v.inserted_key:>On'= v.inserted_key:>On
+		v.ignition_pos:>On' = v.ignition_pos:>On
+		v.engine:>On' = v.engine:>On
+		v.rotary:>On' = v.rotary:>On
+		v.rotary:>Auto' = v.rotary:>Auto
+		v.low_beams:>Power_save' = v.low_beams:>Power_save
+		v.low_beams:>On' = v.low_beams:>On
+		v.exterior_bright:>LX_high' = v.exterior_bright:>LX_high
+		v.exterior_bright:>LX_low' = v.exterior_bright:>LX_low
+		v.ambient_light:>On' = v.ambient_light:>On
+	}
+
+	/** Predicado que permite ligar o day_time com o engine ligado e a 
+		brightness em High
+	*/
+		pred day_time_on_rotary_auto_engine_on[v:Vehicle]{
+		//Pré-condição
+		v.day_time not in On and v.engine in On
+		and v.exterior_bright in LX_high
+		and v.ambient_light not in On and v.rotary in Auto
+		//Pós-Condição
+		v.day_time:>On' = v.day_time:>On + v.day_time 
+		//Frame Condition
+		v.inserted_key:>On'= v.inserted_key:>On
+		v.ignition_pos:>On' = v.ignition_pos:>On
+		v.engine:>On' = v.engine:>On
+		v.rotary:>On' = v.rotary:>On
+		v.rotary:>Auto' = v.rotary:>Auto
+		v.low_beams:>On' = v.low_beams:>On
+		v.low_beams:>Power_save' = v.low_beams:>Power_save
 		v.exterior_bright:>LX_high' = v.exterior_bright:>LX_high
 		v.exterior_bright:>LX_low' = v.exterior_bright:>LX_low
 		v.ambient_light:>On' = v.ambient_light:>On
@@ -558,7 +684,9 @@
 				or  ignition_key_LX250[v] or ignition_key_LX200[v] or ambient_light[v]
 				or engine_stop_ab_on [v] or ambient_light_eb_high[v] or engine_stop_rotary_on[v] 
 				or engine_stop_rotary_auto[v] or rotary_auto_ambient_ligth_on[v]
-				or rotary_off_ambient_ligth_on[v] or ambient_light_eb_low[v])
+				or rotary_off_ambient_ligth_on[v] or ambient_light_eb_low[v]
+				or day_time_on_brigth_high[v] or engine_start_brigth_high_rotary_auto[v]
+				or day_time_on_rotary_auto[v] or day_time_on_rotary_auto_engine_on[v])
 	}
 
 	/** Verificações dos requisitos */
@@ -584,14 +712,14 @@
 	}
 
 	assert ELS18{
-		all v:Vehicle | ((v.rotary in Auto && v.ignition_pos in On && v.exterior_bright in LX_low) implies v.low_beams in On) and
-				      ((v.rotary in Auto && v.ignition_pos in On && v.exterior_bright in LX_high) implies v.low_beams not in On)
+		always (all v:Vehicle | (v.rotary in Auto && v.ignition_pos in On && v.exterior_bright in LX_low) implies v.low_beams in On 
+		and (v.rotary in Auto && v.ignition_pos in On && v.exterior_bright in LX_low) implies v.low_beams in On)
 	}
-
+	
 	assert ELS19{
 		always (all v:Vehicle | v.engine not in On && v.ambient_light in On && v.exterior_bright in LX_low implies v.low_beams in On)
 	}
 	
-	check ELS19
+	check ELS1
 
  	run{} for 20 but exactly 1 USA
