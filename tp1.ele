@@ -533,13 +533,13 @@
 	}
 
 	assert ELS18{
-		all v:Vehicle | ((v.rotary in Auto && v.ignition_pos in On && v.exterior_bright in LX_low) implies v.low_beams in On) and
-				      ((v.rotary in Auto && v.ignition_pos in On && v.exterior_bright in LX_high) implies v.low_beams not in On)
+		always (	all v:Vehicle | ((v.rotary in Auto && v.ignition_pos in On && v.exterior_bright in LX_low) implies v.low_beams in On) and
+				      ((v.rotary in Auto && v.ignition_pos in On && v.exterior_bright in LX_high) implies v.low_beams not in On))
 	}
 
 	assert ELS19{
 		all v:Vehicle | v.engine not in On && v.ambient_light in On && v.exterior_bright in LX_low implies v.low_beams in On
 	}
-	check ELS17
+	check ELS18
 
  	run{} for 20 but exactly 1 USA
