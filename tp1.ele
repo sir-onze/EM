@@ -192,7 +192,7 @@
 		v.exterior_bright:>LX_high' = v.exterior_bright:>LX_high
 		v.exterior_bright:>LX_low' = v.exterior_bright:>LX_low
 		v.ambient_light:>On' = v.ambient_light:>On	
-}
+	}
 
 	/** Predicado para desligar o motor */
 	pred engine_stop [v:Vehicle]{
@@ -349,7 +349,7 @@
 	/** Predicado para colocar o rotary em modo automático  !!Atention!! */
 	pred rotary_auto_not_ignition[v:Vehicle]{
 		//Pré-condição
-		v.ignition_pos not in On
+		v.ignition_pos not in On and v.low_beams not in On
 		//Pós-condição
 		v.rotary:>On'=v.rotary:>On - v.rotary
 		v.low_beams:>Power_save' = v.low_beams:>Power_save - v.low_beams
@@ -364,10 +364,31 @@
 		v.exterior_bright:>LX_low' = v.exterior_bright:>LX_low
 		v.ambient_light:>On' = v.ambient_light:>On	
 	}
-	/** Rotary off */
+	
+	/** Necessario para o ELS 19 - garantir que qd passamos o rotary para auto com a ambient_light a ON mantemos 
+	  os low beams em On 
+	*/
+	pred rotary_auto_ambient_ligth_on[v:Vehicle]{
+		//Pré-condição
+		v.ignition_pos not in On and v.exterior_bright in LX_low and v.ambient_light in On and v.low_beams in On
+		//Pós-condição
+		v.rotary:>On'=v.rotary:>On - v.rotary
+		v.rotary:>Auto'=v.rotary:>Auto + v.rotary
+		// Frame-Condition
+		v.low_beams:>Power_save' = v.low_beams:>Power_save
+    	v.low_beams:>On' = v.low_beams:>On
+		v.inserted_key:>On'= v.inserted_key:>On
+		v.ignition_pos:>On' = v.ignition_pos:>On
+		v.engine:>On' = v.engine:>On
+		v.day_time:>On' = v.day_time:>On
+		v.exterior_bright:>LX_high' = v.exterior_bright:>LX_high
+		v.exterior_bright:>LX_low' = v.exterior_bright:>LX_low
+		v.ambient_light:>On' = v.ambient_light:>On	
+	}
+	/**  Rotary off quando não existem restrições da exterior_ligth e da ambient_light */
 	pred rotary_off[v:Vehicle]{
 		// Pré-condição
-		v.rotary in On or v.rotary in Auto
+		(v.rotary in On or v.rotary in Auto) and v.exterior_bright not in LX_low
 		// Pós-condição
 		v.rotary:>On'=v.rotary:>On - v.rotary
 		v.rotary:>Auto'=v.rotary:>Auto - v.rotary
@@ -383,6 +404,30 @@
 		v.ambient_light:>On' = v.ambient_light:>On
 
 	}
+	
+	/** Predicado para o ELS 19 -> garantir que quando o Rotary passa para off e temos a 
+			a ambient ligth ligada, mantemos os low_beams ligados
+	*/
+	pred rotary_off_ambient_ligth_on[v:Vehicle]{
+		// Pré-condição
+		(v.rotary in Auto or v.rotary in On) and v.ambient_light in On and v.engine not in On and v.exterior_bright in LX_low and v.low_beams in On
+		// Pós-condição
+		v.rotary:>On'=v.rotary:>On - v.rotary
+		v.rotary:>Auto'=v.rotary:>Auto - v.rotary
+		v.low_beams:>Power_save'= v.low_beams:>Power_save - v.low_beams
+		v.low_beams:>On'= v.low_beams:>On + v.low_beams
+		// Frame-Condition
+		v.engine:>On' = v.engine:>On
+		v.inserted_key:>On'= v.inserted_key:>On
+		v.ignition_pos:>On' = v.ignition_pos:>On
+		v.day_time:>On' = v.day_time:>On
+		v.exterior_bright:>LX_high' = v.exterior_bright:>LX_high
+		v.exterior_bright:>LX_low' = v.exterior_bright:>LX_low
+		v.ambient_light:>On' = v.ambient_light:>On
+
+	}
+
+	/** Predicado que permite alterar o estado do day_time para On */
 	pred day_time_on[v:Vehicle]{
 		//Pré-condição
 		no v.day_time:>On and v.engine in On and v.inserted_key in On
@@ -423,6 +468,7 @@
 		v.ambient_light:>On' = v.ambient_light:>On
 	}
 
+	/** Predicado que permite alterar o estado da ambient_ligth para On*/
 	pred ambient_light[v:Vehicle]{
 		//Pré-condição
 		v.engine not in On and v.ambient_light not in On and v.exterior_bright in LX_low
@@ -441,9 +487,12 @@
 		v.exterior_bright:>LX_low' = v.exterior_bright:>LX_low	
 	}
 
-	pred ambient_light_eb[v:Vehicle]{
+	/** Predicado que permite alterar o estado da ambient_ligth para On quando a 
+		exterior_brigthness está em high, ou seja não está em LX_LOW	
+	*/
+	pred ambient_light_eb_high[v:Vehicle]{
 		//Pré-condição
-		v.ambient_light not in On 
+		v.ambient_light not in On and v.exterior_bright not in LX_low
 		//Pós-Condição
 		v.ambient_light:>On' = v.ambient_light:>On + v.ambient_light
 		//Frame Condition
@@ -459,6 +508,27 @@
 		v.exterior_bright:>LX_low' = v.exterior_bright:>LX_low	
 	}
 	
+	/** Predicado que permite alterar o estado da ambient_ligth para On quando a 
+		exterior_brigthness está em LX_LOW	
+	*/
+	pred ambient_light_eb_low[v:Vehicle]{
+		//Pré-condição
+		v.ambient_light not in On and v.exterior_bright in LX_low
+		//Pós-Condição
+		v.ambient_light:>On' = v.ambient_light:>On + v.ambient_light
+		v.low_beams:>On' = v.low_beams:>On + v.low_beams	
+		//Frame Condition
+		v.day_time:>On' = v.day_time:>On
+		v.inserted_key:>On'= v.inserted_key:>On
+		v.ignition_pos:>On' = v.ignition_pos:>On
+		v.engine:>On' = v.engine:>On
+		v.rotary:>On' = v.rotary:>On
+		v.rotary:>Auto' = v.rotary:>Auto	
+		v.low_beams:>Power_save' = v.low_beams:>Power_save 
+		v.exterior_bright:>LX_high' = v.exterior_bright:>LX_high
+		v.exterior_bright:>LX_low' = v.exterior_bright:>LX_low	
+	}
+	
 	/** Predicado que permite ao sistema não efetuar qualquer ação*/
 	pred skip[]{
 	On'=On
@@ -468,12 +538,12 @@
 	/** Inicialização do modelo */
 	pred init{
 
-	all e:Engine_Status| e not in On
-	all k:Inserted_Key | k not in On
-	all i:Ignition_Pos | i not in On
-	all r:Rotary	   | r not in On and r not in Auto
-	all b:Low_Beam     | b not in On and b not in Power_save
-	all d:Day_Time	   | d not in On
+	all e:Engine_Status    | e not in On
+	all k:Inserted_Key     | k not in On
+	all i:Ignition_Pos     | i not in On
+	all r:Rotary	       | r not in On and r not in Auto
+	all b:Low_Beam         | b not in On and b not in Power_save
+	all d:Day_Time	   	   | d not in On
 	all a:Ambient_Light	   | a not in On
 	}
 
@@ -486,7 +556,9 @@
 				or rotary_off[v] or engine_start_daytime[v] or rotary_auto_high_brigth[v]
 				or rotary_auto_low_brigth[v] or rotary_auto_not_ignition[v]
 				or  ignition_key_LX250[v] or ignition_key_LX200[v] or ambient_light[v]
-				or engine_stop_ab_on [v] or ambient_light_eb[v] or engine_stop_rotary_on[v] or engine_stop_rotary_auto[v])
+				or engine_stop_ab_on [v] or ambient_light_eb_high[v] or engine_stop_rotary_on[v] 
+				or engine_stop_rotary_auto[v] or rotary_auto_ambient_ligth_on[v]
+				or rotary_off_ambient_ligth_on[v] or ambient_light_eb_low[v])
 	}
 
 	/** Verificações dos requisitos */
@@ -517,7 +589,9 @@
 	}
 
 	assert ELS19{
-		all v:Vehicle | v.engine not in On && v.ambient_light in On && v.exterior_bright in LX_low implies v.low_beams in On
+		always (all v:Vehicle | v.engine not in On && v.ambient_light in On && v.exterior_bright in LX_low implies v.low_beams in On)
 	}
+	
+	check ELS19
 
  	run{} for 20 but exactly 1 USA
