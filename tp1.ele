@@ -694,7 +694,10 @@
 		always (all v:Vehicle | v.rotary  in Auto && v.ignition_pos not in On 
 						   and v.ambient_light not in On implies v.low_beams not in Power_save && v.low_beams not in On)
 	}
-
+	
+	/** Este requisito entra em conflito com os que tem em conta a luminosidade no exterior para
+		a decisão quanto ao estado dos low beams
+	 */
 	assert ELS17{
 		always (all v:Vehicle | v.day_time in On && v.engine in On implies v.low_beams in On)
 	}
@@ -708,5 +711,20 @@
 		always (all v:Vehicle | v.engine not in On && v.ambient_light in On && v.exterior_bright in LX_low implies v.low_beams in On)
 	}
 	
+//	check ELS14
+//	check ELS15
+//	check ELS16
+//	check ELS17
+//	check ELS18
+ 	run{	eventually  (USA.low_beams in On and USA.exterior_bright in LX_low and USA.engine in On)	 } for 20 but exactly 1 USA
+	
+ 	/* Exemplos de estados para o run
 
- 	run{} for 20 but exactly 1 USA
+		eventually  (USA.engine in On)
+		eventually  (USA.engine in On and USA.low_beams in On)
+		eventually  (USA.low_beams in Power_save)
+		eventually  (USA.low_beams in On and USA.exterior_bright in LX_low and USA.engine in On)
+		eventually  (USA.low_beams in Power_save)
+		eventually  (USA.low_beams in Off and v.day_time in On )
+		eventually  (USA.low_beams not in On and USA.day_time in On and USA.engine in On )
+	*/
