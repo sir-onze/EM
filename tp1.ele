@@ -720,6 +720,6 @@
 		always (all v:Vehicle | v.engine not in On && v.ambient_light in On && v.exterior_bright in LX_low implies v.low_beams in On)
 	}
 	
-	check ELS1
+	check ELS18
 
  	run{} for 20 but exactly 1 USA
