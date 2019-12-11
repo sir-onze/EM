@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<alloy>
+
+<view>
+
+<defaultnode/>
+
+<defaultedge/>
+
+<node>
+   <type name="Ambient_Light"/>
+   <type name="Button"/>
+   <type name="Day_Time"/>
+   <type name="Exterior_Brightness"/>
+   <type name="Ignition_Pos"/>
+   <type name="Inserted_Key"/>
+   <type name="Int"/>
+   <type name="Low_Beam"/>
+   <type name="Rotary"/>
+   <type name="Sensor"/>
+   <type name="String"/>
+   <type name="univ"/>
+   <type name="open$3/Ord"/>
+   <type name="ordering/Ord"/>
+   <type name="seq/Int"/>
+   <set name="this/Auto" type="Button"/>
+   <set name="this/LX_high" type="Sensor"/>
+   <set name="this/LX_low" type="Sensor"/>
+   <set name="$ELS17_v" type="Vehicle"/>
+</node>
+
+<node color="Blue">
+   <type name="CAN"/>
+   <set name="this/Power_save" type="Button"/>
+</node>
+
+<node color="White">
+   <type name="USA"/>
+</node>
+
+<node color="Yellow">
+   <type name="EU"/>
+</node>
+
+<node hideunconnected="yes" showlabel="yes" showinattr="yes" color="Green">
+   <set name="this/On" type="Button"/>
+</node>
+
+<node shape="Trapezoid" color="Red">
+   <type name="Vehicle"/>
+</node>
+
+<node visible="yes" hideunconnected="yes" color="Black">
+   <type name="Engine_Status"/>
+</node>
+
+</view>
+
+</alloy>
