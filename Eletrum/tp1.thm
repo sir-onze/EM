@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<alloy>
+
+<view>
+
+<defaultnode/>
+
+<defaultedge/>
+
+<node>
+   <type name="Button"/>
+   <type name="Exterior_Brightness"/>
+   <type name="Int"/>
+   <type name="Sensor"/>
+   <type name="String"/>
+   <type name="univ"/>
+   <type name="open$3/Ord"/>
+   <type name="ordering/Ord"/>
+   <type name="seq/Int"/>
+   <set name="this/LX_low" type="Sensor"/>
+</node>
+
+<node color="Blue">
+   <type name="CAN"/>
+   <set name="this/Power_save" type="Button"/>
+</node>
+
+<node color="White">
+   <type name="EU"/>
+   <type name="USA"/>
+   <set name="this/Auto" type="Button"/>
+</node>
+
+<node hideunconnected="yes" showlabel="yes" showinattr="yes" color="Green">
+   <set name="this/On" type="Button"/>
+</node>
+
+<node shape="Trapezoid" color="Red">
+   <type name="Vehicle"/>
+</node>
+
+<node style="Bold">
+   <set name="this/LX_high" type="Sensor"/>
+</node>
+
+<node visible="yes" hideunconnected="yes" color="Black">
+   <type name="Engine_Status"/>
+</node>
+
+<node visible="yes" hideunconnected="yes" color="Red">
+   <type name="Ignition_Pos"/>
+   <type name="Inserted_Key"/>
+</node>
+
+<node visible="yes" hideunconnected="yes" shape="Egg" color="Gray">
+   <type name="Ambient_Light"/>
+   <type name="Day_Time"/>
+</node>
+
+<node visible="yes" hideunconnected="yes" shape="Ellipse" color="Red">
+   <type name="Rotary"/>
+</node>
+
+<node visible="yes" hideunconnected="yes" style="Bold" shape="Circle" color="Yellow">
+   <type name="Low_Beam"/>
+</node>
+
+</view>
+
+</alloy>
