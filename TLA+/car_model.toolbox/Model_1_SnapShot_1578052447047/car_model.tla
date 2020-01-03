@@ -51,24 +51,15 @@ IgnitionOn ==
     /\ day_time'        = day_time
     /\ exterior_bright' = exterior_bright
     /\ ambient_light'   = ambient_light
-    
-RemoveKey ==
-    /\ key_state        = "INSERTED"
-    /\ engine           = "OFF"
-    /\ key_state'       = "NOT INSERTED"
-    /\ engine'          = engine
-    /\ rotary'          = rotary
     /\ low_beams'       = low_beams
-    /\ day_time'        = day_time
-    /\ exterior_bright' = exterior_bright
-    /\ ambient_light'   = ambient_light
     
+
+
 
 (* Pedicado que permite a evolução do sistema                               *)
 Next == 
     \/ InsertKey
     \/ IgnitionOn
-    \/ RemoveKey
     
 (*                      Propriedades        
 Permitem aplicar varios estados iniciais e as acções next e o que elas implicam
@@ -79,6 +70,6 @@ Spec == Init /\ [][Next]_<<engine,key_state,low_beams,day_time,exterior_bright,a
 
 =============================================================================
 \* Modification History
-\* Last modified Fri Jan 03 12:09:34 WET 2020 by macz
+\* Last modified Fri Jan 03 11:53:56 WET 2020 by macz
 \* Last modified Tue Dec 31 06:21:35 WET 2019 by mont3iro
 \* Created Sun Dec 29 16:17:48 WET 2019 by macz

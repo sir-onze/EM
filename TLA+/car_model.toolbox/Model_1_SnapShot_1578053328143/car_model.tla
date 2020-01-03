@@ -56,7 +56,6 @@ RemoveKey ==
     /\ key_state        = "INSERTED"
     /\ engine           = "OFF"
     /\ key_state'       = "NOT INSERTED"
-    /\ engine'          = engine
     /\ rotary'          = rotary
     /\ low_beams'       = low_beams
     /\ day_time'        = day_time
@@ -79,6 +78,6 @@ Spec == Init /\ [][Next]_<<engine,key_state,low_beams,day_time,exterior_bright,a
 
 =============================================================================
 \* Modification History
-\* Last modified Fri Jan 03 12:09:34 WET 2020 by macz
+\* Last modified Fri Jan 03 12:08:37 WET 2020 by macz
 \* Last modified Tue Dec 31 06:21:35 WET 2019 by mont3iro
 \* Created Sun Dec 29 16:17:48 WET 2019 by macz
