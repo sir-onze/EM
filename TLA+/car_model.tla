@@ -53,12 +53,24 @@ IgnitionOn ==
     /\ ambient_light'   = ambient_light
     
 
-
+EngineOn ==
+    /\ key_state        = "IN IGNITION"
+    /\ engine           = "OFF"
+    /\ engine'          = "ON"
+    /\ IF day_time = "ON" /\ ambient_light = "OFF"
+        THEN /\ low_beams' = 100
+        ELSE /\ low_beams' = low_beams
+    /\ key_state'       = key_state
+    /\ rotary'          = rotary
+    /\ day_time'        = day_time
+    /\ exterior_bright' = exterior_bright
+    /\ ambient_light'   = ambient_light
 
 (* Pedicado que permite a evolução do sistema                               *)
 Next == 
     \/ InsertKey
     \/ IgnitionOn
+    \/ EngineOn
     
 (*                      Propriedades        
 Permitem aplicar varios estados iniciais e as acções next e o que elas implicam
@@ -69,7 +81,7 @@ Spec == Init /\ [][Next]_<<engine,key_state,low_beams,day_time,exterior_bright,a
 
 =============================================================================
 \* Modification History
-\* Last modified Tue Dec 31 06:21:35 WET 2019 by mont3iro
+\* Last modified Sat Jan 04 10:30:50 WET 2020 by mont3iro
 \* Last modified Sun Dec 29 19:25:47 WET 2019 by macz
 \* Created Sun Dec 29 16:17:48 WET 2019 by macz
 
