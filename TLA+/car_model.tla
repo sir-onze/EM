@@ -126,7 +126,7 @@ RemoveKey ==
 
     
 RotaryAuto == 
-    /\ rotary /= "AUTO"
+    /\ rotary           /= "AUTO"
     /\ rotary'          = "AUTO"
     /\ IF key_state /= "IN IGNITION"
         THEN /\ low_beams' = 0
@@ -160,8 +160,30 @@ RotaryOn ==
     /\ exterior_bright' = exterior_bright
     /\ ambient_light'   = ambient_light
     
+DaytimeOn ==
+    /\ day_time = "OFF" 
+    /\ day_time' = "ON"
+    /\ IF engine = "ON" /\ rotary = "OFF"
+        THEN low_beams' = 100
+        ELSE low_beams'  = low_beams
+    /\ engine'          = engine
+    /\ key_state'       = key_state
+    /\ rotary'          = rotary
+    /\ exterior_bright' = exterior_bright
+    /\ ambient_light'   = ambient_light
 
-                 
+DaytimeOff ==
+    /\ day_time  = "ON" 
+    /\ day_time' = "OFF"
+    /\ IF rotary = "OFF" /\ ambient_light = "OFF"
+        THEN low_beams' = 0
+        ELSE low_beams'  = low_beams
+    /\ engine'          = engine
+    /\ key_state'       = key_state
+    /\ rotary'          = rotary
+    /\ exterior_bright' = exterior_bright
+    /\ ambient_light'   = ambient_light
+                
 (* Pedicado que permite a evolução do sistema                               *)
 Next == 
     \/ InsertKey
@@ -172,6 +194,8 @@ Next ==
     \/ RotaryOn
     \/ IgnitionOff
     \/ EngineOff
+    \/ DaytimeOn
+    \/ DaytimeOff
 (*                      Propriedades        
 Permitem aplicar varios estados iniciais e as acções next e o que elas implicam
 é obrigatorio para permitir o stur+tering equivalenrte ao skip _<<M,N,m,r,n>> 
@@ -181,7 +205,7 @@ Spec == Init /\ [][Next]_<<engine,key_state,low_beams,day_time,exterior_bright,a
 
 =============================================================================
 \* Modification History
-\* Last modified Fri Jan 10 20:41:02 WET 2020 by mont3iro
+\* Last modified Fri Jan 10 22:44:39 WET 2020 by mont3iro
 \* Last modified Sun Dec 29 19:25:47 WET 2019 by macz
 \* Created Sun Dec 29 16:17:48 WET 2019 by macz
 
