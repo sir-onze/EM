@@ -2,18 +2,18 @@
 TLC2 Version 2.14 of 10 July 2019
 @!@!@ENDMSG 2262 @!@!@
 @!@!@STARTMSG 2187:0 @!@!@
-Running breadth-first search Model-Checking with fp 11 and seed 1923968694875725395 with 4 workers on 8 cores with 608MB heap and 1365MB offheap memory [pid: 12097] (Mac OS X 10.15.2 x86_64, AdoptOpenJDK 11.0.3 x86_64, OffHeapDiskFPSet, DiskStateQueue).
+Running breadth-first search Model-Checking with fp 93 and seed -7328559244812586999 with 4 workers on 4 cores with 585MB heap and 1312MB offheap memory [pid: 12952] (Linux 5.4.2-1-MANJARO amd64, AdoptOpenJDK 11.0.3 x86_64, OffHeapDiskFPSet, DiskStateQueue).
 @!@!@ENDMSG 2187 @!@!@
 @!@!@STARTMSG 2220:0 @!@!@
 Starting SANY...
 @!@!@ENDMSG 2220 @!@!@
-Parsing file /Users/macz/Desktop/4ano/MFES/Especificacao e Modelacao/EM/TLA+/car_model.toolbox/Model_1/MC.tla
-Parsing file /Users/macz/Desktop/4ano/MFES/Especificacao e Modelacao/EM/TLA+/car_model.toolbox/Model_1/car_model.tla
-Parsing file /Users/macz/Desktop/4ano/MFES/Especificacao e Modelacao/TLA+ Toolbox.app/Contents/Eclipse/plugins/org.lamport.tlatools_1.0.0.201907102009/tla2sany/StandardModules/TLC.tla
-Parsing file /Users/macz/Desktop/4ano/MFES/Especificacao e Modelacao/TLA+ Toolbox.app/Contents/Eclipse/plugins/org.lamport.tlatools_1.0.0.201907102009/tla2sany/StandardModules/Integers.tla
-Parsing file /Users/macz/Desktop/4ano/MFES/Especificacao e Modelacao/TLA+ Toolbox.app/Contents/Eclipse/plugins/org.lamport.tlatools_1.0.0.201907102009/tla2sany/StandardModules/Naturals.tla
-Parsing file /Users/macz/Desktop/4ano/MFES/Especificacao e Modelacao/TLA+ Toolbox.app/Contents/Eclipse/plugins/org.lamport.tlatools_1.0.0.201907102009/tla2sany/StandardModules/Sequences.tla
-Parsing file /Users/macz/Desktop/4ano/MFES/Especificacao e Modelacao/TLA+ Toolbox.app/Contents/Eclipse/plugins/org.lamport.tlatools_1.0.0.201907102009/tla2sany/StandardModules/FiniteSets.tla
+Parsing file /home/mont3iro/Documents/Universidade/MFES/EM/TP1/EM/TLA+/car_model.toolbox/Model_1/MC.tla
+Parsing file /home/mont3iro/Documents/Universidade/MFES/EM/TP1/EM/TLA+/car_model.toolbox/Model_1/car_model.tla
+Parsing file /usr/share/java/tla-toolbox/plugins/org.lamport.tlatools_1.0.0.201907102009/tla2sany/StandardModules/TLC.tla
+Parsing file /usr/share/java/tla-toolbox/plugins/org.lamport.tlatools_1.0.0.201907102009/tla2sany/StandardModules/Integers.tla
+Parsing file /usr/share/java/tla-toolbox/plugins/org.lamport.tlatools_1.0.0.201907102009/tla2sany/StandardModules/Naturals.tla
+Parsing file /usr/share/java/tla-toolbox/plugins/org.lamport.tlatools_1.0.0.201907102009/tla2sany/StandardModules/Sequences.tla
+Parsing file /usr/share/java/tla-toolbox/plugins/org.lamport.tlatools_1.0.0.201907102009/tla2sany/StandardModules/FiniteSets.tla
 Semantic processing of module Naturals
 Semantic processing of module Integers
 Semantic processing of module car_model
@@ -25,7 +25,7 @@ Semantic processing of module MC
 SANY finished.
 @!@!@ENDMSG 2219 @!@!@
 @!@!@STARTMSG 2185:0 @!@!@
-Starting... (2020-01-03 12:09:40)
+Starting... (2020-01-15 21:06:00)
 @!@!@ENDMSG 2185 @!@!@
 @!@!@STARTMSG 2212:0 @!@!@
 Implied-temporal checking--satisfiability problem has 1 branches.
@@ -58,188 +58,834 @@ Computed 128 initial states...
 Computed 256 initial states...
 @!@!@ENDMSG 2269 @!@!@
 @!@!@STARTMSG 2190:0 @!@!@
-Finished computing initial states: 501 distinct states generated at 2020-01-03 12:09:45.
+Finished computing initial states: 501 distinct states generated at 2020-01-15 21:06:01.
 @!@!@ENDMSG 2190 @!@!@
-@!@!@STARTMSG 2114:1 @!@!@
-Deadlock reached.
-@!@!@ENDMSG 2114 @!@!@
-@!@!@STARTMSG 2121:1 @!@!@
-The behavior up to this point is:
-@!@!@ENDMSG 2121 @!@!@
-@!@!@STARTMSG 2217:4 @!@!@
-1: <Initial predicate>
-/\ day_time = "OFF"
-/\ low_beams = 0
-/\ ambient_light = "OFF"
-/\ rotary = "ON"
-/\ key_state = "NOT INSERTED"
-/\ exterior_bright = 2
-/\ engine = "OFF"
-
-@!@!@ENDMSG 2217 @!@!@
-@!@!@STARTMSG 2217:4 @!@!@
-2: <InsertKey line 29, col 5 to line 36, col 39 of module car_model>
-/\ day_time = "OFF"
-/\ low_beams = 0
-/\ ambient_light = "OFF"
-/\ rotary = "ON"
-/\ key_state = "INSERTED"
-/\ exterior_bright = 2
-/\ engine = "OFF"
-
-@!@!@ENDMSG 2217 @!@!@
-@!@!@STARTMSG 2217:4 @!@!@
-3: <IgnitionOn line 40, col 5 to line 53, col 39 of module car_model>
-/\ day_time = "OFF"
-/\ low_beams = 100
-/\ ambient_light = "OFF"
-/\ rotary = "ON"
-/\ key_state = "IN IGNITION"
-/\ exterior_bright = 2
-/\ engine = "OFF"
-
-@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2192:0 @!@!@
+Checking temporal properties for the current state space with 16012 total distinct states at (2020-01-15 21:06:04)
+@!@!@ENDMSG 2192 @!@!@
+@!@!@STARTMSG 2267:0 @!@!@
+Finished checking temporal properties in 00s at 2020-01-15 21:06:05
+@!@!@ENDMSG 2267 @!@!@
+@!@!@STARTMSG 2200:0 @!@!@
+Progress(6) at 2020-01-15 21:06:05: 88,829 states generated (88,829 s/min), 23,645 distinct states found (23,645 ds/min), 7,632 states left on queue.
+@!@!@ENDMSG 2200 @!@!@
+@!@!@STARTMSG 2200:0 @!@!@
+Progress(9) at 2020-01-15 21:06:06: 182,479 states generated, 32,918 distinct states found, 0 states left on queue.
+@!@!@ENDMSG 2200 @!@!@
+@!@!@STARTMSG 2192:0 @!@!@
+Checking temporal properties for the complete state space with 32918 total distinct states at (2020-01-15 21:06:06)
+@!@!@ENDMSG 2192 @!@!@
+@!@!@STARTMSG 2267:0 @!@!@
+Finished checking temporal properties in 00s at 2020-01-15 21:06:06
+@!@!@ENDMSG 2267 @!@!@
+@!@!@STARTMSG 2193:0 @!@!@
+Model checking completed. No error has been found.
+  Estimates of the probability that TLC did not check all reachable states
+  because two distinct states had the same fingerprint:
+  calculated (optimistic):  val = 2.7E-10
+  based on the actual fingerprints:  val = 7.4E-12
+@!@!@ENDMSG 2193 @!@!@
 @!@!@STARTMSG 2201:0 @!@!@
-The coverage statistics at 2020-01-03 12:09:45
+The coverage statistics at 2020-01-15 21:06:10
 @!@!@ENDMSG 2201 @!@!@
 @!@!@STARTMSG 2773:0 @!@!@
-<Init line 17, col 1 to line 17, col 4 of module car_model>: 1002:1002
+<Init line 64, col 1 to line 64, col 4 of module car_model>: 501:501
 @!@!@ENDMSG 2773 @!@!@
 @!@!@STARTMSG 2221:0 @!@!@
-  line 23, col 8 to line 23, col 33 of module car_model: 2
+  line 70, col 8 to line 70, col 33 of module car_model: 1
 @!@!@ENDMSG 2221 @!@!@
 @!@!@STARTMSG 2221:0 @!@!@
-  line 24, col 8 to line 24, col 30 of module car_model: 1002
-@!@!@ENDMSG 2221 @!@!@
-@!@!@STARTMSG 2772:0 @!@!@
-<InsertKey line 28, col 1 to line 28, col 9 of module car_model>: 501:502
-@!@!@ENDMSG 2772 @!@!@
-@!@!@STARTMSG 2221:0 @!@!@
-  line 29, col 8 to line 29, col 40 of module car_model: 1510
-@!@!@ENDMSG 2221 @!@!@
-@!@!@STARTMSG 2221:0 @!@!@
-  |line 29, col 8 to line 29, col 16 of module car_model: 1008
-@!@!@ENDMSG 2221 @!@!@
-@!@!@STARTMSG 2221:0 @!@!@
-  line 30, col 8 to line 30, col 36 of module car_model: 502
-@!@!@ENDMSG 2221 @!@!@
-@!@!@STARTMSG 2221:0 @!@!@
-  line 31, col 8 to line 31, col 32 of module car_model: 502
-@!@!@ENDMSG 2221 @!@!@
-@!@!@STARTMSG 2221:0 @!@!@
-  line 32, col 8 to line 32, col 32 of module car_model: 502
-@!@!@ENDMSG 2221 @!@!@
-@!@!@STARTMSG 2221:0 @!@!@
-  line 33, col 8 to line 33, col 35 of module car_model: 502
-@!@!@ENDMSG 2221 @!@!@
-@!@!@STARTMSG 2221:0 @!@!@
-  line 34, col 8 to line 34, col 34 of module car_model: 502
-@!@!@ENDMSG 2221 @!@!@
-@!@!@STARTMSG 2221:0 @!@!@
-  line 35, col 8 to line 35, col 41 of module car_model: 502
-@!@!@ENDMSG 2221 @!@!@
-@!@!@STARTMSG 2221:0 @!@!@
-  line 36, col 8 to line 36, col 39 of module car_model: 502
+  line 71, col 8 to line 71, col 30 of module car_model: 501
 @!@!@ENDMSG 2221 @!@!@
 @!@!@STARTMSG 2772:0 @!@!@
-<IgnitionOn line 39, col 1 to line 39, col 10 of module car_model>: 501:502
+<InsertKey line 76, col 1 to line 76, col 9 of module car_model>: 593:7812
 @!@!@ENDMSG 2772 @!@!@
 @!@!@STARTMSG 2221:0 @!@!@
-  line 40, col 8 to line 40, col 36 of module car_model: 1509
+  line 77, col 8 to line 77, col 40 of module car_model: 40730
 @!@!@ENDMSG 2221 @!@!@
 @!@!@STARTMSG 2221:0 @!@!@
-  |line 40, col 8 to line 40, col 16 of module car_model: 1007
+  |line 77, col 8 to line 77, col 16 of module car_model: 32918
 @!@!@ENDMSG 2221 @!@!@
 @!@!@STARTMSG 2221:0 @!@!@
-  line 41, col 8 to line 41, col 39 of module car_model: 502
+  line 78, col 8 to line 78, col 36 of module car_model: 7812
 @!@!@ENDMSG 2221 @!@!@
 @!@!@STARTMSG 2221:0 @!@!@
-  line 42, col 11 to line 42, col 23 of module car_model: 502
+  line 79, col 11 to line 79, col 30 of module car_model: 7812
 @!@!@ENDMSG 2221 @!@!@
 @!@!@STARTMSG 2221:0 @!@!@
-  line 43, col 14 to line 43, col 38 of module car_model: 502
+  line 80, col 20 to line 80, col 40 of module car_model: 3806
 @!@!@ENDMSG 2221 @!@!@
 @!@!@STARTMSG 2221:0 @!@!@
-  line 45, col 26 to line 45, col 47 of module car_model: 0
+  line 81, col 23 to line 81, col 41 of module car_model: 2000
 @!@!@ENDMSG 2221 @!@!@
 @!@!@STARTMSG 2221:0 @!@!@
-  line 47, col 35 to line 47, col 54 of module car_model: 0
+  line 82, col 23 to line 82, col 47 of module car_model: 1806
 @!@!@ENDMSG 2221 @!@!@
 @!@!@STARTMSG 2221:0 @!@!@
-  line 48, col 35 to line 48, col 63 of module car_model: 0
+  line 83, col 20 to line 83, col 33 of module car_model: 4006
 @!@!@ENDMSG 2221 @!@!@
 @!@!@STARTMSG 2221:0 @!@!@
-  line 49, col 8 to line 49, col 32 of module car_model: 502
+  line 84, col 23 to line 84, col 39 of module car_model: 2604
 @!@!@ENDMSG 2221 @!@!@
 @!@!@STARTMSG 2221:0 @!@!@
-  line 50, col 8 to line 50, col 32 of module car_model: 502
+  line 85, col 23 to line 85, col 40 of module car_model: 1402
 @!@!@ENDMSG 2221 @!@!@
 @!@!@STARTMSG 2221:0 @!@!@
-  line 51, col 8 to line 51, col 34 of module car_model: 502
+  line 86, col 8 to line 86, col 32 of module car_model: 7812
 @!@!@ENDMSG 2221 @!@!@
 @!@!@STARTMSG 2221:0 @!@!@
-  line 52, col 8 to line 52, col 41 of module car_model: 502
+  line 87, col 8 to line 87, col 32 of module car_model: 7812
 @!@!@ENDMSG 2221 @!@!@
 @!@!@STARTMSG 2221:0 @!@!@
-  line 53, col 8 to line 53, col 39 of module car_model: 502
+  line 88, col 8 to line 88, col 34 of module car_model: 7812
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 89, col 8 to line 89, col 41 of module car_model: 7812
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 90, col 8 to line 90, col 39 of module car_model: 7812
 @!@!@ENDMSG 2221 @!@!@
 @!@!@STARTMSG 2772:0 @!@!@
-<RemoveKey line 55, col 1 to line 55, col 9 of module car_model>: 0:501
+<RemoveKey line 94, col 1 to line 94, col 9 of module car_model>: 0:9970
 @!@!@ENDMSG 2772 @!@!@
 @!@!@STARTMSG 2221:0 @!@!@
-  line 56, col 8 to line 56, col 36 of module car_model: 1507
+  line 95, col 8 to line 95, col 36 of module car_model: 42888
 @!@!@ENDMSG 2221 @!@!@
 @!@!@STARTMSG 2221:0 @!@!@
-  |line 56, col 8 to line 56, col 16 of module car_model: 1006
+  |line 95, col 8 to line 95, col 16 of module car_model: 32918
 @!@!@ENDMSG 2221 @!@!@
 @!@!@STARTMSG 2221:0 @!@!@
-  line 57, col 8 to line 57, col 31 of module car_model: 1002
+  line 96, col 8 to line 96, col 31 of module car_model: 19940
 @!@!@ENDMSG 2221 @!@!@
 @!@!@STARTMSG 2221:0 @!@!@
-  |line 57, col 8 to line 57, col 13 of module car_model: 501
+  |line 96, col 8 to line 96, col 13 of module car_model: 9970
 @!@!@ENDMSG 2221 @!@!@
 @!@!@STARTMSG 2221:0 @!@!@
-  line 58, col 8 to line 58, col 40 of module car_model: 501
+  line 97, col 8 to line 97, col 40 of module car_model: 9970
 @!@!@ENDMSG 2221 @!@!@
 @!@!@STARTMSG 2221:0 @!@!@
-  line 59, col 8 to line 59, col 32 of module car_model: 501
+  line 98, col 8 to line 98, col 32 of module car_model: 9970
 @!@!@ENDMSG 2221 @!@!@
 @!@!@STARTMSG 2221:0 @!@!@
-  line 60, col 8 to line 60, col 32 of module car_model: 501
+  line 99, col 8 to line 99, col 32 of module car_model: 9970
 @!@!@ENDMSG 2221 @!@!@
 @!@!@STARTMSG 2221:0 @!@!@
-  line 61, col 8 to line 61, col 35 of module car_model: 501
+  line 100, col 8 to line 100, col 34 of module car_model: 9970
 @!@!@ENDMSG 2221 @!@!@
 @!@!@STARTMSG 2221:0 @!@!@
-  line 62, col 8 to line 62, col 34 of module car_model: 501
+  line 101, col 8 to line 101, col 41 of module car_model: 9970
 @!@!@ENDMSG 2221 @!@!@
 @!@!@STARTMSG 2221:0 @!@!@
-  line 63, col 8 to line 63, col 41 of module car_model: 501
+  line 102, col 11 to line 102, col 55 of module car_model: 9970
 @!@!@ENDMSG 2221 @!@!@
 @!@!@STARTMSG 2221:0 @!@!@
-  line 64, col 8 to line 64, col 39 of module car_model: 501
+  |line 102, col 11 to line 102, col 30 of module car_model: 9970
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 102, col 35 to line 102, col 55 of module car_model: 6063
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 103, col 14 to line 103, col 33 of module car_model: 2400
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 104, col 14 to line 104, col 31 of module car_model: 7570
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 105, col 8 to line 105, col 37 of module car_model: 9970
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2772:0 @!@!@
+<IgnitionOn line 110, col 1 to line 110, col 10 of module car_model>: 1405:9970
+@!@!@ENDMSG 2772 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 111, col 8 to line 111, col 36 of module car_model: 42888
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 111, col 8 to line 111, col 16 of module car_model: 32918
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 112, col 8 to line 112, col 39 of module car_model: 9970
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 113, col 11 to line 113, col 23 of module car_model: 9970
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 114, col 14 to line 114, col 38 of module car_model: 3608
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 115, col 20 to line 115, col 59 of module car_model: 6362
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 115, col 20 to line 115, col 34 of module car_model: 6362
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 115, col 39 to line 115, col 59 of module car_model: 3156
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 116, col 23 to line 116, col 47 of module car_model: 1600
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 117, col 29 to line 117, col 68 of module car_model: 4762
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 117, col 29 to line 117, col 43 of module car_model: 4762
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 117, col 48 to line 117, col 68 of module car_model: 1556
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 118, col 32 to line 118, col 54 of module car_model: 1250
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 119, col 32 to line 119, col 63 of module car_model: 3512
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 120, col 8 to line 120, col 32 of module car_model: 9970
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 121, col 8 to line 121, col 32 of module car_model: 9970
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 122, col 8 to line 122, col 34 of module car_model: 9970
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 123, col 8 to line 123, col 41 of module car_model: 9970
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 124, col 8 to line 124, col 39 of module car_model: 9970
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2772:0 @!@!@
+<IgnitionOff line 129, col 1 to line 129, col 11 of module car_model>: 576:7418
+@!@!@ENDMSG 2772 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 130, col 8 to line 130, col 39 of module car_model: 40336
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 130, col 8 to line 130, col 16 of module car_model: 32918
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 131, col 8 to line 131, col 36 of module car_model: 7418
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 132, col 8 to line 132, col 31 of module car_model: 22554
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 132, col 8 to line 132, col 13 of module car_model: 15136
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 133, col 11 to line 133, col 30 of module car_model: 7418
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 134, col 20 to line 134, col 40 of module car_model: 3809
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 135, col 23 to line 135, col 41 of module car_model: 1600
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 136, col 23 to line 136, col 47 of module car_model: 2209
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 137, col 20 to line 137, col 33 of module car_model: 3609
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 138, col 23 to line 138, col 39 of module car_model: 2607
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 139, col 23 to line 139, col 40 of module car_model: 1002
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 140, col 8 to line 140, col 32 of module car_model: 7418
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 141, col 8 to line 141, col 32 of module car_model: 7418
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 142, col 8 to line 142, col 34 of module car_model: 7418
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 143, col 8 to line 143, col 41 of module car_model: 7418
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 144, col 8 to line 144, col 39 of module car_model: 7418
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2772:0 @!@!@
+<EngineOn line 148, col 1 to line 148, col 8 of module car_model>: 1508:7418
+@!@!@ENDMSG 2772 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 149, col 8 to line 149, col 39 of module car_model: 40336
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 149, col 8 to line 149, col 16 of module car_model: 32918
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 150, col 8 to line 150, col 31 of module car_model: 22554
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 150, col 8 to line 150, col 13 of module car_model: 15136
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 151, col 8 to line 151, col 30 of module car_model: 7418
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 152, col 11 to line 152, col 50 of module car_model: 7418
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 152, col 11 to line 152, col 25 of module car_model: 7418
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 152, col 30 to line 152, col 50 of module car_model: 4110
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 153, col 14 to line 153, col 32 of module car_model: 2055
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 154, col 14 to line 154, col 38 of module car_model: 5363
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 155, col 8 to line 155, col 35 of module car_model: 7418
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 156, col 8 to line 156, col 32 of module car_model: 7418
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 157, col 8 to line 157, col 34 of module car_model: 7418
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 158, col 8 to line 158, col 41 of module car_model: 7418
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 159, col 8 to line 159, col 39 of module car_model: 7418
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2772:0 @!@!@
+<EngineOff line 164, col 1 to line 164, col 9 of module car_model>: 602:7718
+@!@!@ENDMSG 2772 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 165, col 8 to line 165, col 30 of module car_model: 40636
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 165, col 8 to line 165, col 13 of module car_model: 32918
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 166, col 8 to line 166, col 39 of module car_model: 15436
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 166, col 8 to line 166, col 16 of module car_model: 7718
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 167, col 8 to line 167, col 36 of module car_model: 7718
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 168, col 8 to line 168, col 31 of module car_model: 7718
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 169, col 11 to line 169, col 30 of module car_model: 7718
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 170, col 20 to line 170, col 40 of module car_model: 4059
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 171, col 23 to line 171, col 41 of module car_model: 1600
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 172, col 23 to line 172, col 47 of module car_model: 2459
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 173, col 20 to line 173, col 33 of module car_model: 3659
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 174, col 23 to line 174, col 39 of module car_model: 2657
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 175, col 23 to line 175, col 40 of module car_model: 1002
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 176, col 8 to line 176, col 32 of module car_model: 7718
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 177, col 8 to line 177, col 34 of module car_model: 7718
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 178, col 8 to line 178, col 41 of module car_model: 7718
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 179, col 8 to line 179, col 39 of module car_model: 7718
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2772:0 @!@!@
+<RotaryAuto line 184, col 1 to line 184, col 10 of module car_model>: 2896:22042
+@!@!@ENDMSG 2772 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 185, col 8 to line 185, col 33 of module car_model: 54960
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 185, col 8 to line 185, col 13 of module car_model: 32918
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 186, col 8 to line 186, col 32 of module car_model: 22042
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 187, col 11 to line 187, col 36 of module car_model: 22042
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 188, col 14 to line 188, col 30 of module car_model: 11822
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 189, col 20 to line 189, col 40 of module car_model: 10220
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 190, col 23 to line 190, col 41 of module car_model: 4200
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 191, col 29 to line 191, col 49 of module car_model: 6020
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 192, col 41 to line 192, col 57 of module car_model: 5000
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 193, col 41 to line 193, col 66 of module car_model: 1020
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 194, col 8 to line 194, col 32 of module car_model: 22042
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 195, col 8 to line 195, col 35 of module car_model: 22042
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 196, col 8 to line 196, col 34 of module car_model: 22042
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 197, col 8 to line 197, col 41 of module car_model: 22042
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 198, col 8 to line 198, col 39 of module car_model: 22042
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2772:0 @!@!@
+<RotaryOn line 203, col 1 to line 203, col 8 of module car_model>: 2821:22898
+@!@!@ENDMSG 2772 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 204, col 8 to line 204, col 21 of module car_model: 55816
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 204, col 8 to line 204, col 13 of module car_model: 32918
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 205, col 8 to line 205, col 21 of module car_model: 22898
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 206, col 11 to line 206, col 31 of module car_model: 22898
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 207, col 20 to line 207, col 41 of module car_model: 10773
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 208, col 23 to line 208, col 40 of module car_model: 2905
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 209, col 29 to line 209, col 53 of module car_model: 7868
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 210, col 32 to line 210, col 47 of module car_model: 5264
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 211, col 32 to line 211, col 53 of module car_model: 2604
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 212, col 20 to line 212, col 45 of module car_model: 12125
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 213, col 29 to line 213, col 49 of module car_model: 6261
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 214, col 32 to line 214, col 50 of module car_model: 3200
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 215, col 32 to line 215, col 56 of module car_model: 3061
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 216, col 23 to line 216, col 38 of module car_model: 5864
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 217, col 8 to line 217, col 32 of module car_model: 22898
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 218, col 8 to line 218, col 35 of module car_model: 22898
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 219, col 8 to line 219, col 34 of module car_model: 22898
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 220, col 8 to line 220, col 41 of module car_model: 22898
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 221, col 8 to line 221, col 39 of module car_model: 22898
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2772:0 @!@!@
+<RotaryOff line 226, col 1 to line 226, col 9 of module car_model>: 301:20896
+@!@!@ENDMSG 2772 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 227, col 8 to line 227, col 22 of module car_model: 53814
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 227, col 8 to line 227, col 13 of module car_model: 32918
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 228, col 8 to line 228, col 22 of module car_model: 20896
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 229, col 11 to line 229, col 30 of module car_model: 20896
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 230, col 20 to line 230, col 70 of module car_model: 11226
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 230, col 20 to line 230, col 45 of module car_model: 11226
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 230, col 50 to line 230, col 70 of module car_model: 6764
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 231, col 23 to line 231, col 41 of module car_model: 2800
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 232, col 23 to line 232, col 39 of module car_model: 8426
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 233, col 20 to line 233, col 51 of module car_model: 9670
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 233, col 20 to line 233, col 34 of module car_model: 9670
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 233, col 39 to line 233, col 51 of module car_model: 4960
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 234, col 23 to line 234, col 44 of module car_model: 1303
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 235, col 23 to line 235, col 36 of module car_model: 8367
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 236, col 8 to line 236, col 32 of module car_model: 20896
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 237, col 8 to line 237, col 35 of module car_model: 20896
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 238, col 8 to line 238, col 34 of module car_model: 20896
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 239, col 8 to line 239, col 41 of module car_model: 20896
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 240, col 8 to line 240, col 39 of module car_model: 20896
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2772:0 @!@!@
+<DaytimeOn line 244, col 1 to line 244, col 9 of module car_model>: 7574:14881
+@!@!@ENDMSG 2772 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 245, col 8 to line 245, col 23 of module car_model: 47799
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 245, col 8 to line 245, col 15 of module car_model: 32918
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 246, col 8 to line 246, col 23 of module car_model: 14881
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 247, col 11 to line 247, col 41 of module car_model: 14881
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 247, col 11 to line 247, col 23 of module car_model: 14881
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 247, col 28 to line 247, col 41 of module car_model: 3308
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 248, col 14 to line 248, col 29 of module car_model: 1202
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 249, col 14 to line 249, col 36 of module car_model: 13679
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 250, col 8 to line 250, col 32 of module car_model: 14881
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 251, col 8 to line 251, col 35 of module car_model: 14881
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 252, col 8 to line 252, col 32 of module car_model: 14881
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 253, col 8 to line 253, col 41 of module car_model: 14881
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 254, col 8 to line 254, col 39 of module car_model: 14881
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2772:0 @!@!@
+<DaytimeOff line 257, col 1 to line 257, col 10 of module car_model>: 999:18037
+@!@!@ENDMSG 2772 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 258, col 8 to line 258, col 23 of module car_model: 50955
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 258, col 8 to line 258, col 15 of module car_model: 32918
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 259, col 8 to line 259, col 24 of module car_model: 18037
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 260, col 11 to line 260, col 49 of module car_model: 18037
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 260, col 11 to line 260, col 24 of module car_model: 18037
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 260, col 29 to line 260, col 49 of module car_model: 7214
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 261, col 14 to line 261, col 30 of module car_model: 3507
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 262, col 20 to line 262, col 59 of module car_model: 14530
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 262, col 20 to line 262, col 34 of module car_model: 14530
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 262, col 39 to line 262, col 59 of module car_model: 5813
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 263, col 23 to line 263, col 41 of module car_model: 2400
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 264, col 29 to line 264, col 41 of module car_model: 12130
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 265, col 38 to line 265, col 59 of module car_model: 5010
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 266, col 41 to line 266, col 57 of module car_model: 1804
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 267, col 41 to line 267, col 64 of module car_model: 3206
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 268, col 32 to line 268, col 48 of module car_model: 7120
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 269, col 8 to line 269, col 32 of module car_model: 18037
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 270, col 8 to line 270, col 35 of module car_model: 18037
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 271, col 8 to line 271, col 32 of module car_model: 18037
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 272, col 8 to line 272, col 41 of module car_model: 18037
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 273, col 8 to line 273, col 39 of module car_model: 18037
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2772:0 @!@!@
+<AmbientOn line 277, col 1 to line 277, col 9 of module car_model>: 11679:15181
+@!@!@ENDMSG 2772 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 278, col 8 to line 278, col 31 of module car_model: 48099
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 278, col 8 to line 278, col 20 of module car_model: 32918
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 279, col 8 to line 279, col 30 of module car_model: 15181
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 280, col 11 to line 280, col 61 of module car_model: 15181
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 280, col 11 to line 280, col 36 of module car_model: 15181
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 280, col 41 to line 280, col 61 of module car_model: 7913
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 281, col 14 to line 281, col 29 of module car_model: 4000
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 282, col 14 to line 282, col 36 of module car_model: 11181
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 283, col 8 to line 283, col 32 of module car_model: 15181
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 284, col 8 to line 284, col 35 of module car_model: 15181
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 285, col 8 to line 285, col 32 of module car_model: 15181
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 286, col 8 to line 286, col 41 of module car_model: 15181
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 287, col 8 to line 287, col 34 of module car_model: 15181
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2772:0 @!@!@
+<AmbientOff line 291, col 1 to line 291, col 10 of module car_model>: 1463:17737
+@!@!@ENDMSG 2772 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 292, col 8 to line 292, col 30 of module car_model: 50655
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 292, col 8 to line 292, col 20 of module car_model: 32918
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 293, col 8 to line 293, col 31 of module car_model: 17737
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 294, col 11 to line 294, col 23 of module car_model: 17737
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 295, col 20 to line 295, col 41 of module car_model: 5612
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 296, col 23 to line 296, col 40 of module car_model: 2606
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 297, col 29 to line 297, col 53 of module car_model: 3006
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 298, col 29 to line 298, col 47 of module car_model: 2004
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 299, col 29 to line 299, col 53 of module car_model: 1002
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 300, col 20 to line 300, col 63 of module car_model: 12125
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 300, col 20 to line 300, col 34 of module car_model: 12125
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 300, col 39 to line 300, col 63 of module car_model: 5614
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 301, col 29 to line 301, col 49 of module car_model: 2458
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 302, col 32 to line 302, col 50 of module car_model: 800
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 303, col 38 to line 303, col 58 of module car_model: 1658
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 304, col 41 to line 304, col 54 of module car_model: 1250
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 305, col 41 to line 305, col 62 of module car_model: 408
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 306, col 29 to line 306, col 69 of module car_model: 9667
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 306, col 29 to line 306, col 43 of module car_model: 9667
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 306, col 48 to line 306, col 69 of module car_model: 3156
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 307, col 32 to line 307, col 48 of module car_model: 1754
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 308, col 38 to line 308, col 71 of module car_model: 7913
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 308, col 38 to line 308, col 51 of module car_model: 7913
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 308, col 56 to line 308, col 71 of module car_model: 6511
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 309, col 41 to line 309, col 57 of module car_model: 2804
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 310, col 47 to line 310, col 78 of module car_model: 5109
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 310, col 47 to line 310, col 61 of module car_model: 5109
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 310, col 66 to line 310, col 78 of module car_model: 4408
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 311, col 50 to line 311, col 65 of module car_model: 1002
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 312, col 50 to line 312, col 71 of module car_model: 4107
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 315, col 8 to line 315, col 32 of module car_model: 17737
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 316, col 8 to line 316, col 35 of module car_model: 17737
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 317, col 8 to line 317, col 32 of module car_model: 17737
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 318, col 8 to line 318, col 41 of module car_model: 17737
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 319, col 8 to line 319, col 34 of module car_model: 17737
 @!@!@ENDMSG 2221 @!@!@
 @!@!@STARTMSG 2774:0 @!@!@
-<TPTypeOK line 7, col 1 to line 7, col 8 of module car_model>
+<TPTypeOK line 23, col 1 to line 23, col 8 of module car_model>
 @!@!@ENDMSG 2774 @!@!@
 @!@!@STARTMSG 2221:0 @!@!@
-  line 8, col 5 to line 14, col 39 of module car_model: 1503
+  line 24, col 5 to line 30, col 39 of module car_model: 32918
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2774:0 @!@!@
+<inv_157912235918385000 line 5, col 1 to line 5, col 22 of module MC>
+@!@!@ENDMSG 2774 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 6, col 1 to line 8, col 10 of module MC: 32918
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 6, col 4 to line 6, col 95 of module MC: 32918
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 6, col 4 to line 6, col 65 of module MC: 32918
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 6, col 4 to line 6, col 40 of module MC: 32918
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 6, col 4 to line 6, col 16 of module MC: 32918
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 6, col 21 to line 6, col 40 of module MC: 7718
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 6, col 45 to line 6, col 65 of module MC: 4059
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 6, col 70 to line 6, col 95 of module MC: 1600
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 8, col 7 to line 8, col 10 of module MC: 32918
 @!@!@ENDMSG 2221 @!@!@
 @!@!@STARTMSG 2202:0 @!@!@
 End of statistics.
 @!@!@ENDMSG 2202 @!@!@
 @!@!@STARTMSG 2200:0 @!@!@
-Progress(3) at 2020-01-03 12:09:45: 2 004 states generated (20 300 s/min), 1 503 distinct states found (15 225 ds/min), 497 states left on queue.
+Progress(9) at 2020-01-15 21:06:10: 182,479 states generated (960,415 s/min), 32,918 distinct states found (173,252 ds/min), 0 states left on queue.
 @!@!@ENDMSG 2200 @!@!@
 @!@!@STARTMSG 2199:0 @!@!@
-2004 states generated, 1503 distinct states found, 497 states left on queue.
+182479 states generated, 32918 distinct states found, 0 states left on queue.
 @!@!@ENDMSG 2199 @!@!@
 @!@!@STARTMSG 2194:0 @!@!@
-The depth of the complete state graph search is 3.
+The depth of the complete state graph search is 9.
 @!@!@ENDMSG 2194 @!@!@
 @!@!@STARTMSG 2268:0 @!@!@
-The average outdegree of the complete state graph is 1 (minimum is 1, the maximum 1 and the 95th percentile is 1).
+The average outdegree of the complete state graph is 1 (minimum is 0, the maximum 5 and the 95th percentile is 4).
 @!@!@ENDMSG 2268 @!@!@
 @!@!@STARTMSG 2186:0 @!@!@
-Finished in 5929ms at (2020-01-03 12:09:45)
+Finished in 11408ms at (2020-01-15 21:06:10)
 @!@!@ENDMSG 2186 @!@!@

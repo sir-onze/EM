@@ -33,8 +33,35 @@ TPTypeOK ==
 estar a 100%                                    *)
 ELS14 == 
     IF rotary = "ON" /\ key_state = "IN IGNITION"
-    THEN low_beams = 100
-    ELSE TRUE
+     THEN /\ low_beams = 100
+     ELSE /\ TRUE
+
+ELS15 ==
+    IF rotary = "ON" /\ key_state = "INSERTED" /\ ambient_light = "OFF"
+     THEN /\ low_beams = 50
+     ELSE /\ TRUE
+     
+ELS16 == 
+    IF rotary = "AUTO" /\ key_state = "INSERTED" /\ ambient_light = "OFF"
+     THEN /\ low_beams = 0
+     ELSE /\ TRUE
+     
+ELS17 ==
+    IF day_time = "ON" /\ engine = "ON" /\ ambient_light = "OFF"
+     THEN /\ low_beams = 100
+     ELSE /\ TRUE
+     
+ELS18 ==
+    IF rotary = "AUTO" /\ key_state = "IN IGNITION" /\ exterior_bright < 200
+     THEN /\ low_beams = 100
+     ELSE /\ IF rotary = "AUTO" /\ key_state = "IN IGNITION" /\ exterior_bright > 250 /\ day_time = "OFF"
+              THEN /\ low_beams = 0
+              ELSE /\ TRUE
+
+ELS19 == 
+    IF engine = "ON" /\ ambient_light = "ON" /\ exterior_bright < 200 /\ key_state /= "IN IGNITION"
+     THEN low_beams = 100
+     ELSE TRUE
 
 
 (* Pedicado de inicialização do sistema                                     *)
@@ -235,13 +262,20 @@ DaytimeOff ==
     /\ day_time  = "ON" 
     /\ day_time' = "OFF"
     /\ IF rotary = "OFF" /\ ambient_light = "OFF"
-        THEN low_beams' = 0
-        ELSE low_beams'  = low_beams
+        THEN /\ low_beams' = 0
+        ELSE /\ IF rotary = "AUTO" /\ exterior_bright < 200 
+                 THEN /\ low_beams' = 100 
+                 ELSE /\ IF rotary = "ON"
+                          THEN /\ IF key_state = "INSERTED"
+                                   THEN /\low_beams' = 50
+                                   ELSE /\low_beams' = low_beams
+                          ELSE /\ low_beams' = 0
     /\ engine'          = engine
     /\ key_state'       = key_state
     /\ rotary'          = rotary
     /\ exterior_bright' = exterior_bright
     /\ ambient_light'   = ambient_light
+
 
 (* Pedicado que permite ativar a Ambient ligth tendo em conta o key state e a exterior brigthness                  *)
 AmbientOn ==
@@ -315,7 +349,7 @@ Spec == Init /\ [][Next]_<<engine,key_state,low_beams,day_time,exterior_bright,a
 
 =============================================================================
 \* Modification History
+\* Last modified Wed Jan 15 21:07:02 WET 2020 by mont3iro
 \* Last modified Wed Jan 15 20:05:53 WET 2020 by macz
-\* Last modified Wed Jan 15 03:59:24 WET 2020 by mont3iro
 \* Created Sun Dec 29 16:17:48 WET 2019 by macz
 
