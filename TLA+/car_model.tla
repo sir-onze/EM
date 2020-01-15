@@ -18,7 +18,7 @@ TPTypeOK ==
 Init == 
     /\ engine          = "OFF"
     /\ key_state       = "NOT INSERTED"
-    /\ rotary          = "ON"
+    /\ rotary          = "OFF"
     /\ low_beams       = 0
     /\ day_time        = "OFF"
     /\ exterior_bright \in 0..500
@@ -41,6 +41,19 @@ InsertKey ==
     /\ day_time'        = day_time
     /\ exterior_bright' = exterior_bright
     /\ ambient_light'   = ambient_light
+    
+RemoveKey ==
+    /\ key_state        = "INSERTED"
+    /\ engine           = "OFF"
+    /\ key_state'       = "NOT INSERTED"
+    /\ engine'          = engine
+    /\ rotary'          = rotary
+    /\ day_time'        = day_time
+    /\ exterior_bright' = exterior_bright
+    /\ IF ambient_light = "ON" /\ exterior_bright < 200
+        THEN /\  low_beams' = 100
+        ELSE /\  low_beams' = 0
+    /\ ambient_light' = ambient_light
 
 
 IgnitionOn ==
@@ -96,7 +109,7 @@ EngineOff ==
     /\ engine           = "ON"
     /\ key_state        = "IN IGNITION"
     /\ key_state'       = "INSERTED"
-    /\ engine'           = "OFF"
+    /\ engine'          = "OFF"
     /\ IF ambient_light = "ON"
         THEN /\ IF exterior_bright < 200
                  THEN /\ low_beams' = 100
@@ -109,20 +122,6 @@ EngineOff ==
     /\ exterior_bright' = exterior_bright
     /\ ambient_light'   = ambient_light
     
-
-    
-RemoveKey ==
-    /\ key_state        = "INSERTED"
-    /\ engine           = "OFF"
-    /\ key_state'       = "NOT INSERTED"
-    /\ engine'          = engine
-    /\ rotary'          = rotary
-    /\ day_time'        = day_time
-    /\ exterior_bright' = exterior_bright
-    /\ IF ambient_light = "ON" /\ exterior_bright < 200
-        THEN /\  low_beams' = 100
-        ELSE /\  low_beams' = 0
-    /\ ambient_light' = ambient_light
 
     
 RotaryAuto == 
@@ -148,18 +147,37 @@ RotaryOn ==
     /\ IF ambient_light = "OFF"  
         THEN /\ IF key_state = "INSERTED" 
                  THEN /\ low_beams' = 50
-                 ELSE /\ low_beams' = 100                   
+                 ELSE /\ IF key_state = "IN IGNITION"
+                          THEN low_beams' = 100
+                          ELSE low_beams' = low_beams                   
         ELSE /\ IF key_state /= "IN IGNITION"
                  THEN /\ IF exterior_bright < 200
                           THEN /\ low_beams' = 100
                           ELSE /\ low_beams' = low_beams
-                 ELSE /\ low_beams' = low_beams     
+                 ELSE low_beams' = 100
     /\ engine'          = engine
     /\ key_state'       = key_state
     /\ day_time'        = day_time
     /\ exterior_bright' = exterior_bright
     /\ ambient_light'   = ambient_light
     
+
+RotaryOff ==
+    /\ rotary /= "OFF"
+    /\ rotary' = "OFF"
+    /\ IF ambient_light = "ON"
+        THEN /\ IF key_state /= "IN IGNITION" /\ exterior_bright < 200
+                 THEN /\ low_beams' = 100
+                 ELSE /\ low_beams' = 0
+        ELSE /\ IF day_time = "ON" /\ engine = "ON"
+                 THEN low_beams' = low_beams
+                 ELSE low_beams' = 0
+    /\ engine'          = engine
+    /\ key_state'       = key_state
+    /\ day_time'        = day_time
+    /\ exterior_bright' = exterior_bright
+    /\ ambient_light'   = ambient_light
+
 DaytimeOn ==
     /\ day_time = "OFF" 
     /\ day_time' = "ON"
@@ -172,6 +190,7 @@ DaytimeOn ==
     /\ exterior_bright' = exterior_bright
     /\ ambient_light'   = ambient_light
 
+
 DaytimeOff ==
     /\ day_time  = "ON" 
     /\ day_time' = "OFF"
@@ -183,7 +202,51 @@ DaytimeOff ==
     /\ rotary'          = rotary
     /\ exterior_bright' = exterior_bright
     /\ ambient_light'   = ambient_light
-                
+
+AmbientOn ==
+    /\ ambient_light    = "OFF"
+    /\ ambient_light'   = "ON"
+    /\ IF key_state /= "IN IGNITION" /\ exterior_bright < 200
+        THEN low_beams' = 100
+        ELSE low_beams'  = low_beams
+    /\ engine'          = engine
+    /\ key_state'       = key_state
+    /\ rotary'          = rotary
+    /\ exterior_bright' = exterior_bright
+    /\ day_time'        = day_time
+
+AmbientOff ==
+    /\ ambient_light    = "ON"
+    /\ ambient_light'   = "OFF"
+    /\ IF rotary = "ON"
+        THEN /\ IF key_state = "INSERTED"
+                 THEN /\ low_beams' = 50
+                 ELSE /\ IF key_state = "IN IGNITION" 
+                       THEN /\ low_beams' = 100
+                       ELSE /\ low_beams' = low_beams
+        ELSE /\ IF rotary = "AUTO" /\ key_state = "IN IGNITION"
+                 THEN /\ IF exterior_bright < 200
+                          THEN /\ low_beams' = 100
+                          ELSE /\ IF exterior_bright > 250
+                                   THEN low_beams' = 0
+                                   ELSE low_beams' = low_beams
+                 ELSE /\ IF rotary = "AUTO" /\ key_state = "INSERTED"
+                          THEN /\ low_beams' = 0
+                          ELSE /\ IF rotary = "OFF" /\ day_time = "OFF"
+                                   THEN /\ low_beams' = 0
+                                   ELSE /\ IF day_time = "ON" /\ engine = "ON"
+                                            THEN low_beams' = 100
+                                            ELSE low_beams' = low_beams
+                                            
+                                                          
+    /\ engine'          = engine
+    /\ key_state'       = key_state
+    /\ rotary'          = rotary
+    /\ exterior_bright' = exterior_bright
+    /\ day_time'        = day_time
+
+
+     
 (* Pedicado que permite a evolução do sistema                               *)
 Next == 
     \/ InsertKey
@@ -192,10 +255,14 @@ Next ==
     \/ RemoveKey
     \/ RotaryAuto
     \/ RotaryOn
+    \/ RotaryOff
     \/ IgnitionOff
     \/ EngineOff
     \/ DaytimeOn
     \/ DaytimeOff
+    \/ AmbientOn
+    \/ AmbientOff
+   
 (*                      Propriedades        
 Permitem aplicar varios estados iniciais e as acções next e o que elas implicam
 é obrigatorio para permitir o stur+tering equivalenrte ao skip _<<M,N,m,r,n>> 
@@ -205,7 +272,7 @@ Spec == Init /\ [][Next]_<<engine,key_state,low_beams,day_time,exterior_bright,a
 
 =============================================================================
 \* Modification History
-\* Last modified Fri Jan 10 22:44:39 WET 2020 by mont3iro
+\* Last modified Wed Jan 15 03:51:54 WET 2020 by mont3iro
 \* Last modified Sun Dec 29 19:25:47 WET 2019 by macz
 \* Created Sun Dec 29 16:17:48 WET 2019 by macz
 
